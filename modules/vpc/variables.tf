@@ -12,5 +12,14 @@ variable "env_name" {
   type = string
 }
 
+variable "private_subnets" {
+    type = list(string)
+}
 
-variable "tags" {}
+variable "public_subnets" {
+    type = list(string)
+}
+
+variable "tags" {
+    type = map(string)
+}
