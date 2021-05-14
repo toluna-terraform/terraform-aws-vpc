@@ -24,3 +24,8 @@
      type = number
      default = 1
  }
+
+ variable "create_tgw_attachment"{
+     type = bool
+     default = false
+ }
