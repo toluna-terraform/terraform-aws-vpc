@@ -1,22 +1,27 @@
+provider "aws" {
+    region = var.aws_region
+    profile = var.aws_profile
+}
+
 locals{
     aws_azs = slice(data.aws_availability_zones.available.names[*], 0, var.number_of_azs)
+    vpc_cidr = cidrsubnet(data.aws_ssm_parameter.network_range.value,4,var.env_index)
+    public_subnets = tolist([cidrsubnet(local.vpc_cidr,3,0),cidrsubnet(local.vpc_cidr,3,1)])
+    private_subnets = tolist([cidrsubnet(local.vpc_cidr,3,2),cidrsubnet(local.vpc_cidr,3,3)])
+    database_subnets = tolist([cidrsubnet(local.vpc_cidr,3,4),cidrsubnet(local.vpc_cidr,3,5)])
 }
 
 
 module "vpc" {
     source = "terraform-aws-modules/vpc/aws"
-
     name            = var.env_name
-    cidr            = var.vpc_cidr
+    cidr            = local.vpc_cidr
     azs             = local.aws_azs
-    
-
-    private_subnets = tolist(["192.168.0.0/24","192.168.1.0/24"])
-    public_subnets = tolist(["192.168.2.0/24","192.168.3.0/24"])
-
+    private_subnets = local.private_subnets
+    public_subnets = local.public_subnets
+    database_subnets = local.database_subnets
     enable_nat_gateway = true
     enable_vpn_gateway = false
-
     tags = tomap({
                 Name="vpc-${var.env_name}",
                 environment=var.env_name,
@@ -26,7 +31,10 @@ module "vpc" {
 
 }
 
-provider "aws" {
-    region = var.aws_region
-    profile = var.aws_profile
+module "tgw" {
+  source = "./modules/tgw"
+  aws_profile = var.aws_profile
+  aws_vpc_id = module.vpc.vpc_id
+  private_subnets = module.vpc.private_subnets
+  create_tgw_attachment = var.create_tgw_attachment
 }

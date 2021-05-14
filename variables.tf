@@ -1,6 +1,5 @@
  variable "aws_profile" {
      type = string
-     default = "ts-non-prod"
  }
 
  variable "env_name" {
@@ -21,7 +20,12 @@
      default = "non-prod"
  }
 
- variable "vpc_cidr" {
-     type = string
-     default = "192.168.0.0/16"
+ variable "env_index" {
+     type = number
+     default = 1
+ }
+
+ variable "create_tgw_attachment"{
+     type = bool
+     default = false
  }
