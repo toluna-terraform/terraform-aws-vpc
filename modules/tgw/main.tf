@@ -1,8 +1,3 @@
-provider "aws" {
-    region = var.aws_region
-    profile = var.aws_profile
-}
-
 locals{
     route_cidr = split(",",data.aws_ssm_parameter.route_cidr.value)
 }
