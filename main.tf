@@ -1,7 +1,3 @@
-provider "aws" {
-    region = var.aws_region
-}
-
 locals{
     aws_azs = slice(data.aws_availability_zones.available.names[*], 0, var.number_of_azs)
     vpc_cidr = cidrsubnet(data.aws_ssm_parameter.network_range.value,4,var.env_index)
