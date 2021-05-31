@@ -1,6 +1,5 @@
 provider "aws" {
     region = var.aws_region
-    profile = var.aws_profile
 }
 
 locals{
@@ -21,9 +20,9 @@ module "vpc" {
     public_subnets = local.public_subnets
     database_subnets = local.database_subnets
     enable_nat_gateway = true
+    single_nat_gateway = true
     enable_vpn_gateway = false
     tags = tomap({
-                Name="vpc-${var.env_name}",
                 environment=var.env_name,
                 application_role="network",
                 created_by="terraform"
