@@ -18,3 +18,8 @@
      type = bool
      default = false
  }
+
+ variable "enable_sam_integration"{
+     type = bool
+     default = false
+ }
