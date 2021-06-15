@@ -1,11 +1,9 @@
 /*
-    private api-gateway integration
+    Private API-Gateway integration
     - creating vpc endpoint
     - creating alb target groups
     - attaching vpce enis as targets
     - export required sam parameters to ssm
-    
-
 */
 locals {
   api_gw_service_name = "com.amazonaws.${data.aws_region.current.name}.execute-api"
