@@ -19,7 +19,7 @@
      default = false
  }
 
- variable "enable_sam_integration"{
-     type = bool
-     default = false
+ variable "private_api_health_route"{
+     type = string
+     default = null
  }

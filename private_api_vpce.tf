@@ -7,10 +7,11 @@
 */
 locals {
   api_gw_service_name = "com.amazonaws.${data.aws_region.current.name}.execute-api"
+  create_private_api_hack = can(var.private_api_health_route)
 }
 
 resource "aws_vpc_endpoint" "execute_api" {
-  count               = "${var.enable_sam_integration ? 1 : 0}"
+  count               = "${local.create_private_api_hack ? 1 : 0}"
   vpc_id              = module.vpc.vpc_id
   service_name        = local.api_gw_service_name
   vpc_endpoint_type   = "Interface"
@@ -26,7 +27,7 @@ resource "aws_vpc_endpoint" "execute_api" {
 }
 
 resource "aws_lb_target_group" "tg_vpce" {
-  count       = "${var.enable_sam_integration ? 1 : 0}"
+  count       = "${local.create_private_api_hack ? 1 : 0}"
   name        = "tg-${var.env_name}-vpce-execute-api"
   port        = 443
   protocol    = "HTTPS"
@@ -38,7 +39,7 @@ resource "aws_lb_target_group" "tg_vpce" {
   }
 
   health_check {
-    path = "/health"
+    path = "${var.private_api_health_route}"
     healthy_threshold = 2
     unhealthy_threshold = 2
     timeout = 2
@@ -59,7 +60,7 @@ resource "aws_lb_target_group_attachment" "tg_vpce" {
   export api gateway related data as ssm parameters for sam integration
 */
 resource "aws_ssm_parameter" "vpce_id" {
-  count = "${var.enable_sam_integration ? 1 : 0}"
+  count = "${local.create_private_api_hack ? 1 : 0}"
   name  = "/infra/${var.env_name}/vpce_id"
   type  = "String"
   value = aws_vpc_endpoint.execute_api[0].id
@@ -69,7 +70,7 @@ resource "aws_ssm_parameter" "vpce_id" {
   export api gateway related data as ssm parameters for sam integration
 */
 resource "aws_ssm_parameter" "private_subnets_ids" {
-  count = "${var.enable_sam_integration ? 1 : 0}"
+  count = "${local.create_private_api_hack ? 1 : 0}"
   name  = "/infra/${var.env_name}/private_subnets_ids"
   type  = "StringList"
   value = join(",", module.vpc.private_subnets)
@@ -79,8 +80,8 @@ resource "aws_ssm_parameter" "private_subnets_ids" {
   export api gateway related data as ssm parameters for sam integration
 */
 resource "aws_ssm_parameter" "vpce_security_groups" {
-  count = "${var.enable_sam_integration ? 1 : 0}"
+  count = "${local.create_private_api_hack ? 1 : 0}"
   name  = "/infra/${var.env_name}/vpce_security_groups"
-  type  = "String"
+  type  = "StringList"
   value = module.vpc.default_security_group_id
 }
