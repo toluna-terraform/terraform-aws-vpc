@@ -18,3 +18,8 @@
      type = bool
      default = false
  }
+
+ variable "enable_private_api"{
+     type = bool
+     default = false
+ }
