@@ -19,7 +19,7 @@
      default = false
  }
 
- variable "private_api_health_route"{
-     type = string
-     default = null
+ variable "enable_private_api"{
+     type = bool
+     default = false
  }
