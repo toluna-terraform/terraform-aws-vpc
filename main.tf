@@ -29,12 +29,3 @@ module "vpc" {
   })
 
 }
-
-module "tgw" {
-  source                = "./modules/tgw"
-  aws_vpc_id            = module.vpc.vpc_id
-  private_subnets       = module.vpc.private_subnets
-  create_tgw_attachment = var.create_tgw_attachment
-}
-
-
