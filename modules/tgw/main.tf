@@ -13,16 +13,16 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_attachment" {
 // Add routes  - Child Account
 resource "aws_route" "route_0" {
   depends_on = [aws_ec2_transit_gateway_vpc_attachment.vpc_attachment]
-  for_each                    = var.create_tgw_attachment ? data.aws_route_tables.route_tables.ids : []
-  route_table_id              = each.value
+  count = (var.create_tgw_attachment ? var.number_of_azs : 0)
+  route_table_id = tolist(data.aws_route_tables.route_tables.ids[*])[count.index]
   transit_gateway_id          = data.aws_ssm_parameter.tgw_id.value
   destination_cidr_block      = local.route_cidr[0]
 }
 // Add routes  - Child Account
 resource "aws_route" "route_1" {
   depends_on = [aws_ec2_transit_gateway_vpc_attachment.vpc_attachment]
-  for_each                    = var.create_tgw_attachment ? data.aws_route_tables.route_tables.ids : []
-  route_table_id              = each.value
+  count = (var.create_tgw_attachment ? var.number_of_azs : 0)
+  route_table_id = tolist(data.aws_route_tables.route_tables.ids[*])[count.index]
   transit_gateway_id          = data.aws_ssm_parameter.tgw_id.value
   destination_cidr_block      = local.route_cidr[1]
 }
