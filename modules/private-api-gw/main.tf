@@ -7,7 +7,6 @@
 */
 locals {
   api_gw_service_name = "com.amazonaws.${data.aws_region.current.name}.execute-api"
-  enis = join("_", aws_vpc_endpoint.execute_api.network_interface_ids[*])
 }
 
 resource "aws_vpc_endpoint" "execute_api" {

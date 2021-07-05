@@ -7,11 +7,6 @@ variable "aws_vpc_id" {
   type = string
 }
 
-variable "create_tgw_attachment" {
-  type    = bool
-  default = false
-}
-
 variable "private_subnets" {
   type = list(string)
 }

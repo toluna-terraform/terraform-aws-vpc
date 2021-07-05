@@ -32,15 +32,15 @@ module "vpc" {
 
 module "tgw" {
   source                = "./modules/tgw"
+  count                 = (var.create_tgw_attachment ? 1 : 0)
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets       = module.vpc.private_subnets
-  create_tgw_attachment = var.create_tgw_attachment
   number_of_azs         = var.number_of_azs
 }
 
 module "private_api_vpce" {
   source                    = "./modules/private-api-gw"
-  enable_private_api        = var.enable_private_api
+  count                     = (var.enable_private_api ? 1 : 0)
   vpc_id                    = module.vpc.vpc_id
   private_subnets_ids       = module.vpc.private_subnets
   default_security_group_id = module.vpc.default_security_group_id

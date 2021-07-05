@@ -3,5 +3,5 @@ output "attributes" {
 }
 
 output "vpce_target_group" {
-    value = module.private_api_vpce.vpce_target_group
+    value = var.enable_private_api ? module.private_api_vpce[0].vpce_target_group : null
 }
