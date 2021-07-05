@@ -1,6 +1,6 @@
 variable "enable_private_api" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "vpc_id" {

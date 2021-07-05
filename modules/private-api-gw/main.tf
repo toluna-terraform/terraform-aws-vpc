@@ -49,17 +49,8 @@ resource "aws_lb_target_group" "tg_vpce" {
 }
 
 resource "aws_lb_target_group_attachment" "tg_vpce" {
-  # depends_on = [
-  #   aws_vpc_endpoint.execute_api
-  # ]
   count = length(var.private_subnets_ids)
-  # count = length(aws_vpc_endpoint.execute_api.network_interface_ids)
-  # for_each         = aws_vpc_endpoint.execute_api.network_interface_ids
-  # for_each         = toset(data.aws_network_interface.vpce_enis.id)
   target_group_arn = aws_lb_target_group.tg_vpce.arn
-  # target_id        = each.value.private_ip
-  #target_id = split("_",join("_", aws_vpc_endpoint.execute_api.network_interface_ids[*]))[count.index]
-  # target_id = tolist(aws_vpc_endpoint.execute_api.network_interface_ids[*].private_ip)[count.index]
   target_id = tolist(data.aws_network_interface.vpce_enis[*].private_ip)[count.index]
 
 }
