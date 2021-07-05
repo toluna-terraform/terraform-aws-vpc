@@ -1,8 +1,3 @@
-variable "enable_private_api" {
-  type    = bool
-  default = false
-}
-
 variable "vpc_id" {
   type = string
 }
