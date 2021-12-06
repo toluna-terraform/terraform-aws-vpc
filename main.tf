@@ -36,6 +36,9 @@ module "tgw" {
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets       = module.vpc.private_subnets
   number_of_azs         = var.number_of_azs
+  depends_on = [
+    module.vpc
+  ]
 }
 
 module "private_api_vpce" {
