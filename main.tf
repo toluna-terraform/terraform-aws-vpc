@@ -44,7 +44,9 @@ module "tgw" {
 module "vpce" {
   source                = "./modules/vpce"
   count                 = (var.create_ecs_ecr_vpce ? 1 : 0)
+  env_name              = var.env_name
   aws_vpc_id            = module.vpc.vpc_id
+  
   depends_on = [
     module.vpc
   ]

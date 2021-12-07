@@ -11,8 +11,8 @@ resource "aws_security_group" "allow_https_ecs_vpce" {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    cidr_blocks      = [data.aws_vpc.main.cidr_block]
-    ipv6_cidr_blocks = [data.aws_vpc.main.ipv6_cidr_block]
+    cidr_blocks      = [data.aws_vpc.selected.cidr_block]
+    ipv6_cidr_blocks = [data.aws_vpc.selected.ipv6_cidr_block]
   }
 
   egress {
@@ -30,7 +30,7 @@ resource "aws_security_group" "allow_https_ecs_vpce" {
 
 resource "aws_vpc_endpoint" "ecs_agent" {
   vpc_id            = var.aws_vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current}.ecs-agent"
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.ecs-agent"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -40,25 +40,14 @@ resource "aws_vpc_endpoint" "ecs_agent" {
   private_dns_enabled = true
 }
 
-resource "aws_vpc_endpoint" "ecs_agent" {
-  vpc_id            = var.aws_vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current}.ecs-agent"
-  vpc_endpoint_type = "Interface"
-
-  security_group_ids = [
-    aws_security_group.allow_https.id,
-  ]
-
-  private_dns_enabled = true
-}
 
 resource "aws_vpc_endpoint" "ecs_telemetry" {
   vpc_id            = var.aws_vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current}.ecs-telemetry"
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.ecs-telemetry"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
-    aws_security_group.allow_https.id,
+    aws_security_group.allow_https_ecs_vpce.id,
   ]
 
   private_dns_enabled = true
@@ -66,11 +55,11 @@ resource "aws_vpc_endpoint" "ecs_telemetry" {
 
 resource "aws_vpc_endpoint" "ecs" {
   vpc_id            = var.aws_vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current}.ecs"
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.ecs"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
-    aws_security_group.allow_https.id,
+    aws_security_group.allow_https_ecs_vpce.id,
   ]
 
   private_dns_enabled = true
@@ -88,8 +77,8 @@ resource "aws_security_group" "allow_https_ecr_vpce" {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    cidr_blocks      = [data.aws_vpc.main.cidr_block]
-    ipv6_cidr_blocks = [data.aws_vpc.main.ipv6_cidr_block]
+    cidr_blocks      = [data.aws_vpc.selected.cidr_block]
+    ipv6_cidr_blocks = [data.aws_vpc.selected.ipv6_cidr_block]
   }
 
   egress {
@@ -107,7 +96,7 @@ resource "aws_security_group" "allow_https_ecr_vpce" {
 
 resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id            = var.aws_vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current}.ecr.api"
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.ecr.api"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -119,7 +108,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id            = var.aws_vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current}.ecr.dkr"
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.ecr.dkr"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
