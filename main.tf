@@ -41,6 +41,15 @@ module "tgw" {
   ]
 }
 
+module "vpce" {
+  source                = "./modules/vpce"
+  count                 = (var.create_ecs_ecr_vpce ? 1 : 0)
+  aws_vpc_id            = module.vpc.vpc_id
+  depends_on = [
+    module.vpc
+  ]
+}
+
 module "private_api_vpce" {
   source                    = "./modules/private-api-gw"
   count                     = (var.enable_private_api ? 1 : 0)
