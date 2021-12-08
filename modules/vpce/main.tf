@@ -1,40 +1,44 @@
 
+resource "aws_security_group" "vpce_sg" {
+    name = "sgr-ecs-ecr-vpce-${var.env_name}"
+    description = "Access control for ECS and ECR VPCEs."
+    vpc_id = var.aws_vpc_id
+    tags = tomap({
+        Name             = "sgr-ecs-ecr-vpce-${var.env_name}",
+        environment      = "${var.env_name}",
+        application_role = "network",
+        created_by       = "terraform"
+    })
+}
 
-// VPCE resource for ECS:
-resource "aws_security_group" "allow_https_ecs_vpce" {
-  name        = "sg-allow-https-ecs-vpce-${var.env_name}"
-  description = "Allow HTTPS inbound traffic"
-  vpc_id      = var.aws_vpc_id
+resource "aws_security_group_rule" "vpce_https_from_vpc" {
+    type = "ingress"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = [ data.aws_vpc.selected.cidr_block ]
+    description = "HTTPS access from entire VPC"
+    security_group_id = aws_security_group.vpce_sg.id
+}
 
-  ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = [data.aws_vpc.selected.cidr_block]
-    ipv6_cidr_blocks = [data.aws_vpc.selected.ipv6_cidr_block]
-  }
-
-  egress {
+resource "aws_security_group_rule" "vpce_outbound" {
+    type = "egress"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name = "allow_tls"
-  }
+    security_group_id = aws_security_group.vpce_sg.id
 }
 
+// VPCEs for ECS:
 resource "aws_vpc_endpoint" "ecs_agent" {
   vpc_id            = var.aws_vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.ecs-agent"
   vpc_endpoint_type = "Interface"
-
+  subnet_ids = var.private_subnets_ids
   security_group_ids = [
-    aws_security_group.allow_https_ecs_vpce.id,
+    aws_security_group.vpce_sg.id,
   ]
 
   private_dns_enabled = true
@@ -45,11 +49,11 @@ resource "aws_vpc_endpoint" "ecs_telemetry" {
   vpc_id            = var.aws_vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.ecs-telemetry"
   vpc_endpoint_type = "Interface"
-
+  subnet_ids = var.private_subnets_ids
   security_group_ids = [
-    aws_security_group.allow_https_ecs_vpce.id,
+    aws_security_group.vpce_sg.id,
   ]
-
+  
   private_dns_enabled = true
 }
 
@@ -57,50 +61,23 @@ resource "aws_vpc_endpoint" "ecs" {
   vpc_id            = var.aws_vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.ecs"
   vpc_endpoint_type = "Interface"
-
+  subnet_ids = var.private_subnets_ids
   security_group_ids = [
-    aws_security_group.allow_https_ecs_vpce.id,
+    aws_security_group.vpce_sg.id,
   ]
 
   private_dns_enabled = true
 }
 
 
-// VPCE resource for ECR:
-resource "aws_security_group" "allow_https_ecr_vpce" {
-  name        = "sg-allow-https-ecr-vpce-${var.env_name}"
-  description = "Allow HTTPS inbound traffic"
-  vpc_id      = var.aws_vpc_id
-
-  ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = [data.aws_vpc.selected.cidr_block]
-    ipv6_cidr_blocks = [data.aws_vpc.selected.ipv6_cidr_block]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name = "allow_tls"
-  }
-}
-
+// VPCEs for ECR:
 resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id            = var.aws_vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.ecr.api"
   vpc_endpoint_type = "Interface"
-
+  subnet_ids = var.private_subnets_ids
   security_group_ids = [
-    aws_security_group.allow_https_ecr_vpce.id,
+    aws_security_group.vpce_sg.id,
   ]
 
   private_dns_enabled = true
@@ -110,10 +87,11 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id            = var.aws_vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.ecr.dkr"
   vpc_endpoint_type = "Interface"
-
+  subnet_ids = var.private_subnets_ids
   security_group_ids = [
-    aws_security_group.allow_https_ecr_vpce.id,
+    aws_security_group.vpce_sg.id,
   ]
 
   private_dns_enabled = true
+  
 }

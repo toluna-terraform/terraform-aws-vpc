@@ -6,3 +6,7 @@ variable "aws_vpc_id" {
   type = string
 }
 
+variable "private_subnets_ids" {
+  
+}
+

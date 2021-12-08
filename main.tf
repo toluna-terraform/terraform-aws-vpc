@@ -46,7 +46,7 @@ module "vpce" {
   count                 = (var.create_ecs_ecr_vpce ? 1 : 0)
   env_name              = var.env_name
   aws_vpc_id            = module.vpc.vpc_id
-  
+  private_subnets_ids   = module.vpc.private_subnets
   depends_on = [
     module.vpc
   ]
