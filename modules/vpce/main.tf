@@ -96,7 +96,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   
 }
 
-# VPCE for Logs
+// VPCE for Logs
 resource "aws_vpc_endpoint" "logs" {
   vpc_id            = var.aws_vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.logs"
@@ -110,7 +110,7 @@ resource "aws_vpc_endpoint" "logs" {
   
 }
 
-# VPCE for S3
+// VPCE for S3
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = var.aws_vpc_id
   service_name = "com.amazonaws.us-east-1.s3"
