@@ -95,3 +95,23 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   private_dns_enabled = true
   
 }
+
+# VPCE for Logs
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id            = var.aws_vpc_id
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.logs"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = var.private_subnets_ids
+  security_group_ids = [
+    aws_security_group.vpce_sg.id,
+  ]
+
+  private_dns_enabled = true
+  
+}
+
+# VPCE for S3
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id       = var.aws_vpc_id
+  service_name = "com.amazonaws.us-east-1.s3"
+}
