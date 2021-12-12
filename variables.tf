@@ -32,5 +32,6 @@
 
  variable "create_ecs_ecr_vpce" {
      type = bool
+     default = false
      description = "Set this variable to true when you want to create VPCEs for ECS and ECR (PrivateLinks)."
  }
