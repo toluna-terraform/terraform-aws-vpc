@@ -1,10 +1,10 @@
 
 resource "aws_security_group" "vpce_sg" {
-    name = "sgr-ecs-ecr-vpce-${var.env_name}"
+    name = "ecs-ecr-vpce-${var.env_name}"
     description = "Access control for ECS and ECR VPCEs."
     vpc_id = var.aws_vpc_id
     tags = tomap({
-        Name             = "sgr-ecs-ecr-vpce-${var.env_name}",
+        Name             = "sg-ecs-ecr-vpce-${var.env_name}",
         environment      = "${var.env_name}",
         application_role = "network",
         created_by       = "terraform"
