@@ -41,7 +41,7 @@ module "tgw" {
   ]
 }
 
-module "vpce-for-ecs" {
+module "vpce_for_ecs" {
   source                = "./modules/vpce"
   count                 = (var.create_ecs_ecr_vpce ? 1 : 0)
   env_name              = var.env_name
