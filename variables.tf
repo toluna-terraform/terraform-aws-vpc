@@ -30,7 +30,7 @@
      description = "For SAM integration - Create VPC endpoint and required resources and export them as SSM params"
  }
 
- variable "create_ecs_ecr_vpce" {
+ variable "create_ecs_vpce" {
      type = bool
      default = false
      description = "Set this variable to true when you want to create VPCEs for ECS and ECR (PrivateLinks)."
