@@ -35,3 +35,8 @@
      default = false
      description = "Set this variable to true when you want to create VPCEs for ECS and ECR (PrivateLinks)."
  }
+
+ variable "create_nat_gateway" {
+     type = bool
+     default = false
+ }
