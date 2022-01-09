@@ -19,8 +19,8 @@ module "vpc" {
   public_subnets       = local.public_subnets
   database_subnets     = local.database_subnets
   enable_dns_hostnames = true
-  enable_nat_gateway   = true
-  single_nat_gateway   = true
+  enable_nat_gateway   = var.create_nat_gateway
+  single_nat_gateway   = var.create_nat_gateway
   enable_vpn_gateway   = false
   tags = tomap({
     environment      = var.env_name,
