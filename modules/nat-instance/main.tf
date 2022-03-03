@@ -24,7 +24,7 @@ resource "aws_security_group" "nat_instance_sg" {
 
 // Create role.
 resource "aws_iam_role" "ssm_agent_role" {
-  name = "ssm_agent_role"
+  name = "${var.env_name}_ssm_agent_role"
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": {
@@ -76,15 +76,17 @@ resource "aws_route" "route_to_nat_instace" {
   route_table_id            = tolist(data.aws_route_tables.route_tables_of_private_networks.ids[*])[count.index]
 }
 
-// Creating private instance for tests.
-resource "aws_instance" "private_instance" {
-  instance_type         = var.nat_instance_type
-  subnet_id             = var.private_subnets_ids[0]
-  ami                   = data.aws_ami.amazon_linux.id
-  iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
+// Private instance for tests.
+// In case of any issues with networking uncomment this block and redeploy.
+# // and use this instance for pings traceroutes etc.
+# resource "aws_instance" "private_instance" {
+#   instance_type         = var.nat_instance_type
+#   subnet_id             = var.private_subnets_ids[0]
+#   ami                   = data.aws_ami.amazon_linux.id
+#   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   
-  tags = {
-    Name = "${var.env_name}-private-instance"
-  }
-}
+#   tags = {
+#     Name = "${var.env_name}-private-instance"
+#   }
+# }
 
