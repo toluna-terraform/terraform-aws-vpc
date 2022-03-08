@@ -1,7 +1,7 @@
 // Create security groups that allows all traffic from VPC's cidr to NAT-Instance.
 resource "aws_security_group" "nat_instance_sg" {
     vpc_id      = var.aws_vpc_id
-    name        = "${var.env_name}-nat-instance-sg"
+    name        = "${var.env_name}-nat-instance"
 
     ingress {
         from_port       = 0
@@ -18,13 +18,13 @@ resource "aws_security_group" "nat_instance_sg" {
         cidr_blocks     = ["0.0.0.0/0"]
     }
     tags = {
-        Name = "${var.env_name}-nat-instance-sg"
+        Name = "sg-nat-instance-${var.env_name}"
     }
 }
 
 // Create role.
 resource "aws_iam_role" "ssm_agent_role" {
-  name = "${var.env_name}_ssm_agent_role"
+  name = "iam-role-ssm-agent-${var.env_name}"
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": {
@@ -43,7 +43,7 @@ resource "aws_iam_role_policy_attachment" "attach_ssm_role" {
 
 // Create instance profile.
 resource "aws_iam_instance_profile" "nat_instance_profile" {
-  name = "${var.env_name}_nat_instance_profile"
+  name = "iam-profile-nat-instance-${var.env_name}"
   role = aws_iam_role.ssm_agent_role.name
 }
 
@@ -58,7 +58,7 @@ resource "aws_instance" "nat_instance" {
   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   user_data             = "${data.template_file.nat_instance_setup_template.rendered}"
   tags = {
-    Name = "${var.env_name}-nat-instance"
+    Name = "ec2-nat-instance-${var.env_name}"
   }
 }
 
@@ -86,7 +86,7 @@ resource "aws_route" "route_to_nat_instace" {
 #   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   
 #   tags = {
-#     Name = "${var.env_name}-private-instance"
+#     Name = "ec2-private-instance-${var.env_name}"
 #   }
 # }
 
