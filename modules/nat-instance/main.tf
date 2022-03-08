@@ -43,7 +43,7 @@ resource "aws_iam_role_policy_attachment" "attach_ssm_role" {
 
 // Create instance profile.
 resource "aws_iam_instance_profile" "nat_instance_profile" {
-  name = "nat_instance_profile"
+  name = "${var.env_name}_nat_instance_profile"
   role = aws_iam_role.ssm_agent_role.name
 }
 
