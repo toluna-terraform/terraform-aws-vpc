@@ -53,6 +53,20 @@ module "ecs_vpce" {
   ]
 }
 
+module "nat_instance" {
+  source                = "./modules/nat-instance"
+  count                 = (var.create_nat_instance ? 1 : 0)
+  env_name              = var.env_name
+  number_of_azs         = var.number_of_azs
+  aws_vpc_id            = module.vpc.vpc_id
+  nat_instance_type     = var.nat_instance_type
+  public_subnets_ids    = module.vpc.public_subnets
+  private_subnets_ids   = module.vpc.private_subnets
+  depends_on = [
+    module.vpc
+  ]
+}
+
 module "private_api_vpce" {
   source                    = "./modules/private-api-gw"
   count                     = (var.enable_private_api ? 1 : 0)
