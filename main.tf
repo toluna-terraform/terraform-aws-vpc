@@ -11,8 +11,8 @@ locals {
 
 
 module "vpc" {
-  #source               = "terraform-aws-modules/vpc/aws"
-  source               = "./modules/vpc" #Workaroud for route table empty result issue
+  source               = "terraform-aws-modules/vpc/aws"
+  version              = "~>3.13.0"
   name                 = var.env_name
   cidr                 = local.vpc_cidr
   azs                  = local.aws_azs
