@@ -15,11 +15,11 @@ func TestAwsVpcCreaton (t *testing.T) {
 
         // Variables to pass to Terraform module using -var options
         Vars: map[string]interface{}{
-                "env_name": "terratest-create-vpc-with-nat-ins",
+                "env_name": "terratest-create-vpc-with-ecs-vpce",
                 "number_of_azs": 2,
                 "env_type": "non-prod",
                 "env_index": 8,
-                "create_nat_instance" : "true",
+                "create_ecs_vpce" : "true",
         },
  
     })
