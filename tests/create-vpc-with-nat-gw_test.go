@@ -28,8 +28,8 @@ func TestAwsVpcCreaton (t *testing.T) {
 
     terraform.InitAndApply(t, terraformOptions)
 
-    vpc_id := terraform.Output(t, terraformOptions, "vpc-id")
+    vpcId := terraform.Output(t, terraformOptions, "exampleVpcId")
 
-    fmt.Println("vpc_id = ", vpc_id)
+    fmt.Println("vpc info = ", vpcId)
 
 }

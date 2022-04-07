@@ -1,4 +1,4 @@
-module "vpc" {
+module "exampleVpc" {
     source = "../.."
 
     env_name = var.env_name
