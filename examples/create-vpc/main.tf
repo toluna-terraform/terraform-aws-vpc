@@ -1,17 +1,16 @@
 module "vpc" {
     source = "../.."
 
-    env_name = "butter"
-    number_of_azs = 2
-    env_type = "non-prod"
-    env_index = 8 
+    env_name = var.env_name
+    number_of_azs = var.number_of_azs
+    env_type = var.env_type
+    env_index = var.env_index 
 
-    create_tgw_attachment = false
-    enable_private_api = false
-    create_ecs_vpce = false
-    create_nat_gateway = false
-    create_nat_instance = false
-    nat_instance_type = "t3.nano"
+    create_nat_gateway = var.create_nat_gateway
+    create_nat_instance = var.create_nat_instance
+    nat_instance_type = var.nat_instance_type
+    create_tgw_attachment = var.create_tgw_attachment
+    enable_private_api = var.enable_private_api
+    create_ecs_vpce = var.create_ecs_vpce
 
-    #name = "srinivas test vpc"
 }

@@ -12,15 +12,15 @@ func TestAwsVpcCreaton (t *testing.T) {
 
     terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options {
         TerraformDir : "../examples/create-vpc",
-       
-        // Variables to pass to Terraform module using -var options
-        Vars: map[string]interface{}{
-                "env_name": "terratest-create-vpc",
-                "number_of_azs": 2,
-                "env_type": "non-prod",
-                "env_index": 8,
-        },
  
+        // Variables to pass to Terraform module using -var options
+	Vars: map[string]interface{}{
+		"env_name": "terratest-create-vpc-private-api",
+		"number_of_azs": 2,
+		"env_type": "non-prod",
+		"env_index": 8,
+		"enable_private_api": "true",
+	},
     })
 
     defer terraform.Destroy(t, terraformOptions)
@@ -28,7 +28,7 @@ func TestAwsVpcCreaton (t *testing.T) {
     terraform.InitAndApply(t, terraformOptions)
 
     vpc_id := terraform.Output(t, terraformOptions, "vpc-id")
-
     fmt.Println("vpc_id = ", vpc_id)
+
 
 }
