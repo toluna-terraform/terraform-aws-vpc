@@ -1,11 +1,12 @@
 output "exampleVpcId" {
     value = module.exampleVpc.attributes.vpc_id
-    sensitive = true
 }
 
+output "igwId" {
+    value = module.exampleVpc.attributes.igw_id
+}
 
-output "natgw-id" {
+output "natgwId" {
     value = module.exampleVpc.attributes.natgw_ids
-    sensitive = true
 }
 
