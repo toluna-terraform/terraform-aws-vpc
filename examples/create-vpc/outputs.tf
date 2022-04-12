@@ -1,20 +1,24 @@
 output "example_vpc_id" {
-    value = module.exampleVpc.attributes.vpc_id
+    value = module.example_vpc.attributes.vpc_id
 }
 
 output "igw_id" {
-    value = module.exampleVpc.attributes.igw_id
+    value = module.example_vpc.attributes.igw_id
 }
 
 output "public_subnets" {
-    value = module.exampleVpc.attributes.public_subnets[0]
+    value = module.example_vpc.attributes.public_subnets[0]
 }
 
 output "private_subnets" {
-    value = module.exampleVpc.attributes.private_subnets[0]
+    value = module.example_vpc.attributes.private_subnets[0]
 }
 
 
-output "natgwId" {
-    value = module.exampleVpc.attributes.natgw_ids
+output "natgw_id" {
+    value = module.example_vpc.attributes.natgw_ids
+}
+
+output "nat_instance_id" {
+    value = module.example_vpc.module.nat_instance
 }
