@@ -1,8 +1,8 @@
-output "exampleVpcId" {
+output "example_vpc_id" {
     value = module.exampleVpc.attributes.vpc_id
 }
 
-output "igwId" {
+output "igw_id" {
     value = module.exampleVpc.attributes.igw_id
 }
 

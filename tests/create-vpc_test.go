@@ -6,6 +6,7 @@ import (
 
     "github.com/gruntwork-io/terratest/modules/terraform"
     "github.com/stretchr/testify/assert"
+    //"github.com/toluna-terraform/terraform-test-library"
 )
 
 func TestAwsVpcCreaton (t *testing.T) {
@@ -28,11 +29,11 @@ func TestAwsVpcCreaton (t *testing.T) {
 
     terraform.InitAndApply(t, terraformOptions)
 
-    vpc_id := terraform.Output(t, terraformOptions, "exampleVpcId")
+    vpc_id := terraform.Output(t, terraformOptions, "example_vpc_id")
     fmt.Println("vpc_id = ", vpc_id)
     assert.NotEmpty(t, vpc_id)
 
-    igw_id := terraform.Output(t, terraformOptions, "igwId")
+    igw_id := terraform.Output(t, terraformOptions, "igw_id")
     fmt.Println("igw_id = ", igw_id)
     assert.NotEmpty(t, igw_id)
 
