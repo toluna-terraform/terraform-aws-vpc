@@ -18,7 +18,3 @@ output "private_subnets" {
 output "natgw_id" {
     value = module.example_vpc.attributes.natgw_ids
 }
-
-output "nat_instance_id" {
-    value = module.example_vpc.module.nat_instance
-}
