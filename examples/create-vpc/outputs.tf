@@ -2,6 +2,11 @@ output "example_vpc_id" {
     value = module.example_vpc.attributes.vpc_id
 }
 
+output "example_vpc" {
+    value = module.example_vpc
+    sensitive = true
+}
+
 output "igw_id" {
     value = module.example_vpc.attributes.igw_id
 }
@@ -16,5 +21,5 @@ output "private_subnets" {
 
 
 output "natgw_id" {
-    value = module.example_vpc.attributes.natgw_ids
+    value = module.example_vpc.attributes.natgw_ids[0]
 }

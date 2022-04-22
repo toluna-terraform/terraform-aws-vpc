@@ -45,4 +45,8 @@ func TestAwsVpcCreaton (t *testing.T) {
     public_subnet_id := terraform.Output(t, terraformOptions, "public_subnets")
     fmt.Println("pubilc_subnets = ", public_subnet_id )
     assert.NotEmpty(t, public_subnet_id )
+
+    natgw_id := terraform.Output(t, terraformOptions, "natgw_id")
+    fmt.Println("natgw_id = ", natgw_id)
+    assert.NotEmpty(t, natgw_id)
 }
