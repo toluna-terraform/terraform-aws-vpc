@@ -13,4 +13,7 @@ module "example_vpc" {
     enable_private_api = var.enable_private_api
     create_ecs_vpce = var.create_ecs_vpce
 
+    enable_dhcp_options = var.enable_dhcp_options
+    dhcp_options_domain_name = var.dhcp_options_domain_name
+    dhcp_options_domain_name_servers = var.dhcp_options_domain_name_servers
 }

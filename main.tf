@@ -23,6 +23,11 @@ module "vpc" {
   enable_nat_gateway   = var.create_nat_gateway
   single_nat_gateway   = var.create_nat_gateway
   enable_vpn_gateway   = false
+
+  dhcp_options_domain_name = var.dhcp_options_domain_name
+  dhcp_options_domain_name_servers = var.dhcp_options_domain_name_servers
+  enable_dhcp_options = var.enable_dhcp_options
+
   tags = tomap({
     environment      = var.env_name,
     application_role = "network",

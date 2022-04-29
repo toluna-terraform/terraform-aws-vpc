@@ -52,3 +52,21 @@
      type        = string
      default     = "t3.nano"
  }
+
+variable "enable_dhcp_options" {
+    type = bool
+    description = "Flag indicating if DHCP optoins to be enabled ."
+    default = false
+}
+
+variable "dhcp_options_domain_name" {
+    type = string
+    description = "Domain Name in DHCP options set."
+    default = "devops-toluna.com"
+}
+
+variable "dhcp_options_domain_name_servers" {
+    type = list(string)
+    description = "List of domain name servers"
+    default = ["AmazonProvidedDNS"]
+}

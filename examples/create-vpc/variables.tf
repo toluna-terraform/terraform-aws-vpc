@@ -1,6 +1,7 @@
 variable "env_name" {
     type = string
     description = "Environment name for which VPC is getting created."
+    default = "test-create-vpc"
 }
 
 variable "number_of_azs" {
@@ -54,4 +55,22 @@ variable "create_ecs_vpce" {
     type = bool
     description = "Flag indicating if VPE Endpoint to be created for ECS. Applicable for ECS based applications."
     default = false
+}
+
+variable "enable_dhcp_options" {
+    type = bool
+    description = "Flag indicating if DHCP optoins to be enabled ."
+    default = true
+}
+
+variable "dhcp_options_domain_name" {
+    type = string
+    description = "Domain Name in DHCP options."
+    default = "devops-main-toluna.com"
+}
+
+variable "dhcp_options_domain_name_servers" {
+    type = list(string)
+    description = "List of Domain Name servers"
+    default = ["AmazonProvidedDNS"]
 }
