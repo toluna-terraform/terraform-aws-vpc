@@ -15,10 +15,13 @@ import (
 
 var moduleName = tolunacommons.GetModName()
 var region = "us-east-1"
-var env_name = "terratest-create-vpc"
+var env_name = "terratest-create-vpc-with-dhcp-options"
 var env_type = "non-prod"
 var number_of_azs = 2
 var env_index = 8
+var enable_dhcp_options = true
+var dhcp_options_domain_name = "devops-test.toluna.com"
+var dhcp_options_domain_name_servers = [] string {"dummy1_DNS", }
 
 func configureTerraformOptions(t *testing.T) *terraform.Options {
 
@@ -32,6 +35,9 @@ func configureTerraformOptions(t *testing.T) *terraform.Options {
                 "number_of_azs": number_of_azs,
                 "env_type": env_type,
                 "env_index": env_index,
+                "enable_dhcp_options" : enable_dhcp_options,
+                "dhcp_options_domain_name" : dhcp_options_domain_name,
+                //"dhcp_options_domain_name_servers" :  dhcp_options_domain_name_servers,
 		},
 	})
 	return terraformOptions
