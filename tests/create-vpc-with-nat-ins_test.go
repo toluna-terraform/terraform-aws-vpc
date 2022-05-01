@@ -15,7 +15,7 @@ import (
 
 var moduleName = tolunacommons.GetModName()
 var region = "us-east-1"
-var env_name = "terratest-create-vpc"
+var env_name = "terratest-create-vpc-with-nat-ins"
 var env_type = "non-prod"
 var number_of_azs = 2
 var env_index = 8
@@ -27,7 +27,7 @@ func configureTerraformOptions(t *testing.T) *terraform.Options {
 
         // Variables to pass to Terraform module using -var options
         Vars: map[string]interface{}{
-                "env_name": "terratest-create-vpc-with-nat-gw",
+                "env_name": env_name,
                 "number_of_azs": 2,
                 "env_type": "non-prod",
                 "env_index": 8,
