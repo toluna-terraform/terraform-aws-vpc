@@ -69,6 +69,16 @@ func TestPublicAndPrivateSubnets(t *testing.T) {
     assert.NotEmpty(t, privateSubnetId)
 }
 
+// Test if NAT instance created
+func TestIfNatInstanceCreated (t *testing.T) {
+    tolunacoverage.MarkAsCovered("terraform-aws-vpc", moduleName)
+
+    //check if NAT instance created
+    natInstanceId := terraform.Output(t, configureTerraformOptions(t), "nat_instance_id")
+    fmt.Println("nat_instance_id = ", natInstanceId)
+    assert.NotEmpty(t, natInstanceId)
+}
+
 
 // Clean up the infra created as part of setup above
 func TestCleanUp(t *testing.T) {
