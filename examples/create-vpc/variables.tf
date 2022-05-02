@@ -48,7 +48,7 @@ variable "create_tgw_attachment" {
 variable "enable_private_api" {
     type = bool
     description = "Flag indicating if private-api to be enabled. Applicable for AWS SAM applications."
-    default = false
+    default = true
 }
 
 variable "create_ecs_vpce" {
@@ -60,7 +60,7 @@ variable "create_ecs_vpce" {
 variable "enable_dhcp_options" {
     type = bool
     description = "Flag indicating if DHCP optoins to be enabled ."
-    default = true
+    default = false
 }
 
 variable "dhcp_options_domain_name" {

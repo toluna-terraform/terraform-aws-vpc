@@ -60,15 +60,24 @@ func TestPublicAndPrivateSubnets(t *testing.T) {
 
     //check public subnet
     publicSubnetId := terraform.Output(t, configureTerraformOptions(t), "public_subnets")
-    fmt.Println("publicSubnetId =", publicSubnetId)
+    fmt.Println("publicSubnetId = ", publicSubnetId)
     assert.NotEmpty(t, publicSubnetId)
 
     //check public subnet
     privateSubnetId := terraform.Output(t, configureTerraformOptions(t), "private_subnets")
-    fmt.Println("privateSubnetId =", privateSubnetId)
+    fmt.Println("privateSubnetId = ", privateSubnetId)
     assert.NotEmpty(t, privateSubnetId)
 }
 
+// Test if Private API VpcE created
+func TestIfPrivateApiVpceCreated (t *testing.T) {
+    tolunacoverage.MarkAsCovered("terraform-aws-vpc", moduleName)
+
+    //check private API vpce
+    privateApiVpce := terraform.Output (t, configureTerraformOptions(t), "private_api_vpce")
+    fmt.Println("privateApiVpce = ", privateApiVpce)
+    assert.NotEmpty(t, privateApiVpce) 
+}
 
 // Clean up the infra created as part of setup above
 func TestCleanUp(t *testing.T) {

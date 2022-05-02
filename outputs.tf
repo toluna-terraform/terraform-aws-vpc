@@ -13,5 +13,9 @@ output "nat_instance" {
 }
 
 output "nat_instance_id" {
-    value = module.nat_instance[0].nat_instance.id
+    value = length(module.nat_instance) > 0 ? module.nat_instance[0].nat_instance.id : null
+}
+
+output "private_api_vpce" {
+    value = module.private_api_vpce
 }

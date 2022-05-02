@@ -31,3 +31,7 @@ output "nat_instance_id" {
    value = module.example_vpc.nat_instance_id
 }
 
+output "private_api_vpce" {
+   value = module.example_vpc.private_api_vpce
+}
+
