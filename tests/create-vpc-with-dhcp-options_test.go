@@ -20,7 +20,7 @@ var env_type = "non-prod"
 var number_of_azs = 2
 var env_index = 8
 var enable_dhcp_options = true
-var dhcp_options_domain_name = "devops-test.toluna.com"
+var dhcp_options_domain_name = "tests.devops-toluna.com"
 var dhcp_options_domain_name_servers = [] string {"dummy1_DNS", }
 
 func configureTerraformOptions(t *testing.T) *terraform.Options {
@@ -75,6 +75,16 @@ func TestPublicAndPrivateSubnets(t *testing.T) {
         privateSubnetId := terraform.Output(t, configureTerraformOptions(t), "private_subnets")
         fmt.Println("privateSubnetId =", privateSubnetId)
         assert.NotEmpty(t, privateSubnetId)
+}
+
+// Test if DHCP options set created
+func TestIfDhcpOptionsSetCreated (t *testing.T) {
+	tolunacoverage.MarkAsCovered("terraform-aws-vpc", moduleName)
+
+        //check DHCP options set id
+        dhcpOptionsSetId := terraform.Output(t, configureTerraformOptions(t), "dhcp_options_set_id")
+        fmt.Println("dhcpOptionsSetId =", dhcpOptionsSetId )
+        assert.NotEmpty(t, dhcpOptionsSetId)
 }
 
 // Clean up the infra created as part of setup above

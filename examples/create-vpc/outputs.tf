@@ -7,20 +7,24 @@ output "example_vpc" {
     sensitive = true
 }
 
+output "dhcp_options_set_id" {
+    value = module.example_vpc.attributes.dhcp_options_id
+}
+
 output "igw_id" {
     value = module.example_vpc.attributes.igw_id
 }
 
 output "public_subnets" {
-    value = module.example_vpc.attributes.public_subnets[0]
+    value = module.example_vpc.attributes.public_subnets
 }
 
 output "private_subnets" {
-    value = module.example_vpc.attributes.private_subnets[0]
+    value = module.example_vpc.attributes.private_subnets
 }
 
 output "natgw_id" {
-    value = module.example_vpc.attributes.natgw_ids
+    value = length(module.example_vpc.attributes.natgw_ids) > 0 ? module.example_vpc.attributes.natgw_ids[0] : null
 }
 
 output "nat_instance" {

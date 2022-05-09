@@ -48,7 +48,7 @@ variable "create_tgw_attachment" {
 variable "enable_private_api" {
     type = bool
     description = "Flag indicating if private-api to be enabled. Applicable for AWS SAM applications."
-    default = true
+    default = false
 }
 
 variable "create_ecs_vpce" {
