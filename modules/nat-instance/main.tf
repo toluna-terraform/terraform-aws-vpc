@@ -47,32 +47,39 @@ resource "aws_iam_instance_profile" "nat_instance_profile" {
   role = aws_iam_role.ssm_agent_role.name
 }
 
-// Creating NAT Instance.
-resource "aws_instance" "nat_instance" {
-  // Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs.
-  source_dest_check     = false
-  instance_type         = var.nat_instance_type
+resource "aws_network_interface" "network_interface" {
   subnet_id             = var.public_subnets_ids[0]
-  ami                   = data.aws_ami.amazon_linux.id
+  source_dest_check     = false
   security_groups       = [aws_security_group.nat_instance_sg.id]
-  iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
-  user_data             = "${data.template_file.nat_instance_setup_template.rendered}"
+
   tags = {
-    Name = "ec2-nat-instance-${var.env_name}"
+    Name = "nat-instance-network-interface-${var.env_name}"
   }
 }
 
-// Adding EIP for NAT Instance.
-resource "aws_eip" "elastic_ip" {
-  instance = aws_instance.nat_instance.id
-  vpc      = true
+// Creating NAT Instance.
+resource "aws_instance" "nat_instance" {
+  // Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs.
+  instance_type         = var.nat_instance_type
+  ami                   = data.aws_ami.amazon_linux.id
+  iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
+  user_data             = "${data.template_file.nat_instance_setup_template.rendered}"
+
+  network_interface {
+    network_interface_id = aws_network_interface.network_interface.id
+    device_index = 0
+  }
+
+  tags = {
+    Name = "ec2-nat-instance-${var.env_name}"
+  }
 }
 
 // Route private networks through NAT-Instance network interface.
 resource "aws_route" "route_to_nat_instace" {
   destination_cidr_block    = "0.0.0.0/0"
   count                     = var.number_of_azs
-  network_interface_id      = data.aws_instance.nat_instance_data.network_interface_id
+  network_interface_id      = aws_network_interface.network_interface.id
   route_table_id            = tolist(data.aws_route_tables.route_tables_of_private_networks.ids[*])[count.index]
 }
 
