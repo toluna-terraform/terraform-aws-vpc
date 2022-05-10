@@ -25,3 +25,11 @@ resource "aws_route" "route_1" {
   transit_gateway_id          = data.aws_ssm_parameter.tgw_id.value
   destination_cidr_block      = local.route_cidr[1]
 }
+// Add routes  - Child Account
+resource "aws_route" "route_2" {
+  depends_on = [aws_ec2_transit_gateway_vpc_attachment.vpc_attachment]
+  count = var.number_of_azs
+  route_table_id = tolist(data.aws_route_tables.route_tables.ids[*])[count.index]
+  transit_gateway_id          = data.aws_ssm_parameter.tgw_id.value
+  destination_cidr_block      = local.route_cidr[2]
+}

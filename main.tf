@@ -7,6 +7,8 @@ locals {
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 3, 0), cidrsubnet(local.vpc_cidr, 3, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 3, 2), cidrsubnet(local.vpc_cidr, 3, 3)])
   database_subnets = tolist([cidrsubnet(local.vpc_cidr, 3, 4), cidrsubnet(local.vpc_cidr, 3, 5)])
+
+  dns_servers = tolist(split(",", data.aws_ssm_parameter.dns_servers.value))
 }
 
 
@@ -25,8 +27,10 @@ module "vpc" {
   enable_vpn_gateway   = false
 
   dhcp_options_domain_name = var.dhcp_options_domain_name
-  dhcp_options_domain_name_servers = var.dhcp_options_domain_name_servers
-  enable_dhcp_options = var.enable_dhcp_options
+  enable_dhcp_options = ( var.dhcp_options_domain_name == null ) ? false : true
+  dhcp_options_domain_name_servers = local.dns_servers
+
+  default_network_acl_egress = var.default_network_acl_egress
 
   tags = tomap({
     environment      = var.env_name,

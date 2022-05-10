@@ -42,7 +42,7 @@ variable "nat_instance_type" {
 variable "create_tgw_attachment" {
     type = bool
     description = "Flag indicating if Transit Gateway attachment created or not"
-    default = false
+    default = true
 }
 
 variable "enable_private_api" {
@@ -57,20 +57,14 @@ variable "create_ecs_vpce" {
     default = false
 }
 
-variable "enable_dhcp_options" {
-    type = bool
-    description = "Flag indicating if DHCP optoins to be enabled ."
-    default = false
-}
-
 variable "dhcp_options_domain_name" {
     type = string
     description = "Domain Name in DHCP options."
-    default = "devops-main-toluna.com"
+    default = "tests.devops-toluna.com"
 }
 
-variable "dhcp_options_domain_name_servers" {
-    type = list(string)
-    description = "List of Domain Name servers"
-    default = ["AmazonProvidedDNS"]
+variable "default_network_acl_egress" {
+    type = list(map(string))
+    description = "List of ACL egress rules"
+    default = [{ "rule_no": 99, "action": "allow", "cidr_block": "10.0.0.0/0", "from_port": 0, "protocol": "-1",  "to_port": 0 } ]
 }
