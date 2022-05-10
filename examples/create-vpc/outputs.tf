@@ -35,6 +35,15 @@ output "nat_instance_id" {
    value = module.example_vpc.nat_instance_id
 }
 
+output "tgw_vpc_attachment" {
+   value = module.example_vpc.tgw_vpc_attachment
+   sensitive = true
+}
+
+output "tgw_vpc_attachment_id" {
+   value = module.example_vpc.tgw_vpc_attachment_id
+}
+
 output "private_api_vpce" {
    value = module.example_vpc.private_api_vpce
 }
