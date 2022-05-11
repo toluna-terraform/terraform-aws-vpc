@@ -53,12 +53,6 @@
      default     = "t3.nano"
  }
 
-variable "dhcp_options_domain_name" {
-    type = string
-    description = "Domain Name in DHCP options set."
-    default = ""
-}
-
 variable "default_network_acl_egress" {
     type = list(map(string))
     description = "List of ACL egress rules"

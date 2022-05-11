@@ -30,7 +30,7 @@ variable "create_nat_gateway" {
 variable "create_nat_instance" {
     type = bool
     description = "Flag indicating if NAT Instance to be created or not."
-    default = false
+    default = true
 }
 
 variable "nat_instance_type" {
@@ -55,12 +55,6 @@ variable "create_ecs_vpce" {
     type = bool
     description = "Flag indicating if VPE Endpoint to be created for ECS. Applicable for ECS based applications."
     default = false
-}
-
-variable "dhcp_options_domain_name" {
-    type = string
-    description = "Domain Name in DHCP options."
-    default = "tests.devops-toluna.com"
 }
 
 variable "default_network_acl_egress" {

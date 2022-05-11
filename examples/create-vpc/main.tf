@@ -6,8 +6,6 @@ module "example_vpc" {
     env_type = var.env_type
     env_index = var.env_index 
 
-    dhcp_options_domain_name = var.dhcp_options_domain_name
-
     create_nat_gateway = var.create_nat_gateway
     create_nat_instance = var.create_nat_instance
     nat_instance_type = var.nat_instance_type
