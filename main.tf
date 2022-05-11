@@ -46,7 +46,7 @@ module "tgw" {
   count                 = (var.create_tgw_attachment ? 1 : 0)
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets       = module.vpc.private_subnets
-  number_of_azs         = var.number_of_azs
+  private_rtb_ids       = module.vpc.private_route_table_ids
   depends_on = [
     module.vpc
   ]
