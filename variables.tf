@@ -56,6 +56,7 @@
 variable "dhcp_options_domain_name" {
     type = string
     description = "Domain Name in DHCP options set."
+    default = ""
 }
 
 variable "default_network_acl_egress" {

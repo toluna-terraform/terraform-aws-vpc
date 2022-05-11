@@ -27,7 +27,7 @@ module "vpc" {
   enable_vpn_gateway   = false
 
   dhcp_options_domain_name = var.dhcp_options_domain_name
-  enable_dhcp_options = ( var.dhcp_options_domain_name == null ) ? false : true
+  enable_dhcp_options = ( var.dhcp_options_domain_name == "" ) ? false : true
   dhcp_options_domain_name_servers = local.dns_servers
 
   default_network_acl_egress = var.default_network_acl_egress
