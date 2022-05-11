@@ -30,7 +30,7 @@ variable "create_nat_gateway" {
 variable "create_nat_instance" {
     type = bool
     description = "Flag indicating if NAT Instance to be created or not."
-    default = true
+    default = false
 }
 
 variable "nat_instance_type" {
@@ -42,7 +42,7 @@ variable "nat_instance_type" {
 variable "create_tgw_attachment" {
     type = bool
     description = "Flag indicating if Transit Gateway attachment created or not"
-    default = true
+    default = false
 }
 
 variable "enable_private_api" {
