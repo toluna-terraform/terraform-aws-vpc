@@ -1,15 +1,15 @@
 locals{
     private_rtb_ids = var.private_rtb_ids
     destination_cidrs = split(",",data.aws_ssm_parameter.route_cidr.value)
-
-    RouteTableCidrEntries = distinct(flatten([
+    
+    RouteTableCidrEntries = flatten([
 	    for rt_id in local.private_rtb_ids : [
             for cidr in local.destination_cidrs : {
                   rt_id = rt_id
                   cidr = cidr
             }
         ]			
-   ]))
+   ])
 }
 
 // Create the VPC attachment  - Child Account

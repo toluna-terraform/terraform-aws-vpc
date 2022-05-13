@@ -27,8 +27,8 @@ module "vpc" {
   single_nat_gateway   = var.create_nat_gateway
   enable_vpn_gateway   = false
 
+  enable_dhcp_options = var.enable_dhcp_options
   dhcp_options_domain_name = local.domain_name
-  enable_dhcp_options = ( local.domain_name == "ec2.internal" ) ? false : true
   dhcp_options_domain_name_servers = local.dns_servers
 
   default_network_acl_egress = var.default_network_acl_egress
@@ -46,7 +46,7 @@ module "tgw" {
   count                 = (var.create_tgw_attachment ? 1 : 0)
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets       = module.vpc.private_subnets
-  private_rtb_ids       = module.vpc.private_route_table_ids
+  private_rtb_ids       = module.vpc.private_route_table_ids 
   depends_on = [
     module.vpc
   ]
