@@ -23,7 +23,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_attachment" {
 resource "aws_route" "route_0" {
   depends_on = [aws_ec2_transit_gateway_vpc_attachment.vpc_attachment]
   
-  for_each = { for entry, record in nonsensitive(local.RouteTableCidrEntries) : entry => record }
+  # for_each = { for entry, record in nonsensitive(local.RouteTableCidrEntries) : entry => record }
+  for_each = toset([for k,v in local.RouteTableCidrEntries : v])
 
   route_table_id              = each.value.rt_id
   transit_gateway_id          = data.aws_ssm_parameter.tgw_id.value
