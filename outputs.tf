@@ -28,3 +28,4 @@ output "tgw_vpc_attachment_id" {
 output "private_api_vpce" {
     value = module.private_api_vpce
 }
+

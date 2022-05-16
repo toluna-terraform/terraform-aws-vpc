@@ -53,7 +53,7 @@
      default     = "t3.nano"
  }
 
-  variable "enable_dhcp_options" {
+variable "enable_dhcp_options" {
      description = "Flag to enable or disable dhcp options set"
      type        = bool
      default     = false
