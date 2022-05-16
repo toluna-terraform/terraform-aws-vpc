@@ -39,5 +39,6 @@ data "aws_caller_identity" "attachment_account" {}
 // Get RouteTables
 data "aws_route_tables" "route_tables" {
   vpc_id   = var.aws_vpc_id
+  
 }
 

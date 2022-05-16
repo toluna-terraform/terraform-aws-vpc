@@ -1,16 +1,11 @@
 locals{
-    private_rtb_ids = var.private_rtb_ids
+    private_rtb_ids = data.aws_route_tables.route_tables.ids
     destination_cidrs = split(",",data.aws_ssm_parameter.route_cidr.value)
-    
-    RouteTableCidrEntries = flatten([
-	    for rt_id in local.private_rtb_ids : [
-            for cidr in local.destination_cidrs : {
-                  rt_id = rt_id
-                  cidr = cidr
-            }
-        ]			
-   ])
+    rtb_map = setproduct(var.private_rtb_ids,local.destination_cidrs)
+    rtb_size = length(var.private_rtb_ids[*])*length(local.destination_cidrs)
 }
+
+
 
 // Create the VPC attachment  - Child Account
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_attachment" {
@@ -20,13 +15,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_attachment" {
 }
 
 // Add routes  - Child Account
-resource "aws_route" "route_0" {
+resource "aws_route" "tgw_routes" {
   depends_on = [aws_ec2_transit_gateway_vpc_attachment.vpc_attachment]
-  
-  # for_each = { for entry, record in nonsensitive(local.RouteTableCidrEntries) : entry => record }
-  for_each = toset([for k,v in local.RouteTableCidrEntries : v])
-
-  route_table_id              = each.value.rt_id
+  count = local.rtb_size
+  route_table_id              = local.rtb_map[count.index][0]
+  destination_cidr_block      = local.rtb_map[count.index][1]
   transit_gateway_id          = data.aws_ssm_parameter.tgw_id.value
-  destination_cidr_block      = each.value.cidr
 }

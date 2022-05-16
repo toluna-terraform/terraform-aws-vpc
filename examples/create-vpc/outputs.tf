@@ -47,4 +47,3 @@ output "tgw_vpc_attachment_id" {
 output "private_api_vpce" {
    value = module.example_vpc.private_api_vpce
 }
-
