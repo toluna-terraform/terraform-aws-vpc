@@ -11,6 +11,6 @@ variable "private_subnets" {
   type = list(string)
 }
 
-variable "number_of_azs" {
-  type = number
+variable "private_rtb_ids" {
+  type = list(string)
 }

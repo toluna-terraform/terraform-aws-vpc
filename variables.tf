@@ -52,3 +52,15 @@
      type        = string
      default     = "t3.nano"
  }
+
+variable "enable_dhcp_options" {
+     description = "Flag to enable or disable dhcp options set"
+     type        = bool
+     default     = false
+ }
+
+variable "default_network_acl_egress" {
+    type = list(map(string))
+    description = "List of ACL egress rules"
+    default = [{ "rule_no": 100, "action": "allow", "cidr_block": "0.0.0.0/0", "from_port": 0, "protocol": "-1",  "to_port": 0 } ]
+}

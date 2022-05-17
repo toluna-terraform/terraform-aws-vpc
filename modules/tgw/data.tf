@@ -31,13 +31,14 @@ data "aws_ec2_transit_gateway" "tgw" {
 data "aws_caller_identity" "attachment_account" {}
 
 // Get Share ARN
-data "aws_ram_resource_share" "tgw_share" {
-  resource_owner = "OTHER-ACCOUNTS"
-  name           = data.aws_ssm_parameter.resource_share_name.value
-}
+//data "aws_ram_resource_share" "tgw_share" {
+  //resource_owner = "OTHER-ACCOUNTS"
+  //name           = data.aws_ssm_parameter.resource_share_name.value
+//}
 
 // Get RouteTables
 data "aws_route_tables" "route_tables" {
   vpc_id   = var.aws_vpc_id
+  
 }
 

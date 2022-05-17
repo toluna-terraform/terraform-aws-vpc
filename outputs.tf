@@ -7,3 +7,25 @@ output "vpce_target_group" {
     value = var.enable_private_api ? module.private_api_vpce[0].vpce_target_group : null
     description = "Optional - VPC endpoint ENIs target group"
 }
+
+output "nat_instance" {
+    value = module.nat_instance
+}
+
+output "nat_instance_id" {
+    value = length(module.nat_instance) > 0 ? module.nat_instance[0].nat_instance.id : null
+}
+
+output "tgw_vpc_attachment" {
+    value = length(module.tgw) > 0 ? module.tgw[0].tgw_vpc_attachment : null
+    sensitive = true
+}
+
+output "tgw_vpc_attachment_id" {
+    value = length(module.tgw) > 0 ? module.tgw[0].tgw_vpc_attachment.id : null
+}
+
+output "private_api_vpce" {
+    value = module.private_api_vpce
+}
+

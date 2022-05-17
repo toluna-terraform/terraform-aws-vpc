@@ -7,6 +7,9 @@ locals {
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 3, 0), cidrsubnet(local.vpc_cidr, 3, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 3, 2), cidrsubnet(local.vpc_cidr, 3, 3)])
   database_subnets = tolist([cidrsubnet(local.vpc_cidr, 3, 4), cidrsubnet(local.vpc_cidr, 3, 5)])
+
+  domain_name = data.aws_ssm_parameter.domain_name.value
+  dns_servers = tolist(split(",", data.aws_ssm_parameter.dns_servers.value))
 }
 
 
@@ -23,6 +26,13 @@ module "vpc" {
   enable_nat_gateway   = var.create_nat_gateway
   single_nat_gateway   = var.create_nat_gateway
   enable_vpn_gateway   = false
+
+  enable_dhcp_options = var.enable_dhcp_options
+  dhcp_options_domain_name = local.domain_name
+  dhcp_options_domain_name_servers = local.dns_servers
+
+  default_network_acl_egress = var.default_network_acl_egress
+
   tags = tomap({
     environment      = var.env_name,
     application_role = "network",
@@ -36,10 +46,7 @@ module "tgw" {
   count                 = (var.create_tgw_attachment ? 1 : 0)
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets       = module.vpc.private_subnets
-  number_of_azs         = var.number_of_azs
-  depends_on = [
-    module.vpc
-  ]
+  private_rtb_ids       = module.vpc.private_route_table_ids
 }
 
 module "ecs_vpce" {
