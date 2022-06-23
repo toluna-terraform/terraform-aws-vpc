@@ -142,6 +142,11 @@ resource "aws_vpc_endpoint" "monitoring" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = var.aws_vpc_id
   service_name = "com.amazonaws.${data.aws_region.current.name}.s3"
-  vpc_endpoint_type = "Gateway"
-  route_table_ids = [data.aws_route_table.route_table_1.id,data.aws_route_table.route_table_2.id]
+  vpc_endpoint_type = "Interface"
+  subnet_ids = var.private_subnets_ids
+  security_group_ids = [
+    aws_security_group.vpce_sg.id,
+  ]
+
+  private_dns_enabled = true
 }
