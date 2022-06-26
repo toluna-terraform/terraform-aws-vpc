@@ -144,5 +144,4 @@ resource "aws_vpc_endpoint" "s3" {
   service_name = "com.amazonaws.${data.aws_region.current.name}.s3"
   vpc_endpoint_type = "Gateway"
   route_table_ids = [data.aws_route_table.route_table_1.id,data.aws_route_table.route_table_2.id]
-  private_dns_enabled = true
 }
