@@ -50,11 +50,17 @@ module "tgw" {
 }
 
 module "ecs_vpce" {
-  source                = "./modules/ecs-vpce"
+  # source                = "../terraform-aws-vpces"
+  source                = "toluna-terraform/vpces/aws"
+  version               = "~>0.0.5"
+
   count                 = (var.create_ecs_vpce ? 1 : 0)
+
   env_name              = var.env_name
+  create_ecs_vpce       = var.create_ecs_vpce
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets_ids   = module.vpc.private_subnets
+
   depends_on = [
     module.vpc
   ]
