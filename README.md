@@ -13,7 +13,21 @@ The module imports some configurations from SSM Parameters Store:
 - /infra/tgw/is_shared
 - /infra/tgw/resource_share_name
 
+## Parameters
+```yaml
+env_name
+env_type
+number_of_azs
+env_index
+```
+
 ## Toggles
+#### Creating ECS VPE Endpoint
+```yaml
+create_ecs_vpce = true
+```
+- creates VPC Endpoints for ECS, ECS Agent, Telementry
+
 #### Transit gateway attachment:
 ```yaml
 create_tgw_attachment = true
