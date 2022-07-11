@@ -1,4 +1,4 @@
-output "attributes" {
+output "vpc_attributes" {
     value = { for key, value in module.vpc : key => value }
     description = "All the internal VPC modules output parameters"
     sensitive = true
@@ -28,5 +28,9 @@ output "tgw_vpc_attachment_id" {
 
 output "private_api_vpce" {
     value = module.private_api_vpce
+}
+
+output "default_dhcp_options" {
+    value = data.aws_vpc_dhcp_options.default_dhcp_options.tags.Name
 }
 
