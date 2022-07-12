@@ -13,10 +13,16 @@ data "aws_ssm_parameter" "dns_servers" {
 }
 
 data "aws_vpc_dhcp_options" "default_dhcp_options" {
+
   filter {
-    name   = "tag:Name"
-    values = ["default"]
+    name   = "key"
+    values = [ "domain-name" ]
   }
+  filter {
+    name   = "value"
+    values = [ "ec2.internal" ]
+  }
+
 }
 
 data "aws_region" "current" {}
