@@ -34,3 +34,7 @@ output "default_dhcp_options" {
     value = data.aws_vpc_dhcp_options.default_dhcp_options.tags.Name
 }
 
+output "aws_region" {
+    value = data.aws_region.current.name
+}
+
