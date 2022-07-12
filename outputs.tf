@@ -31,7 +31,7 @@ output "private_api_vpce" {
 }
 
 output "default_dhcp_options" {
-    value = data.aws_vpc_dhcp_options.default_dhcp_options.tags.Name
+    value = data.aws_vpc_dhcp_options.default_dhcp_options
 }
 
 output "aws_region" {
