@@ -1,4 +1,4 @@
-output "vpc_attributes" {
+output "attributes" {
     value = { for key, value in module.vpc : key => value }
     description = "All the internal VPC modules output parameters"
     sensitive = true
