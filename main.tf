@@ -41,6 +41,20 @@ module "vpc" {
 
 }
 
+resource "aws_vpc_dhcp_options_association" "dhcp" {
+
+  // if DHCP options not enabled, assign default DHCP options
+  count = ( var.enable_dhcp_options == false ) ? 1 : 0
+
+  vpc_id          = module.vpc.vpc_id
+  dhcp_options_id = data.aws_vpc_dhcp_options.default_dhcp_options.dhcp_options_id
+
+  depends_on = [
+      module.vpc
+  ]
+
+}
+
 module "tgw" {
   source                = "./modules/tgw"
   count                 = (var.create_tgw_attachment ? 1 : 0)
@@ -53,6 +67,7 @@ module "ecs_vpce" {
   # source                = "../terraform-aws-vpces"
   source                = "toluna-terraform/vpces/aws"
   version               = "~>0.0.5"
+  region                = data.aws_region.current.name
 
   count                 = (var.create_ecs_vpce ? 1 : 0)
 
