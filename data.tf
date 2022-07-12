@@ -19,3 +19,5 @@ data "aws_vpc_dhcp_options" "default_dhcp_options" {
   }
 }
 
+data "aws_region" "current" {}
+

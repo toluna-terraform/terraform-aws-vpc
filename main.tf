@@ -67,6 +67,7 @@ module "ecs_vpce" {
   # source                = "../terraform-aws-vpces"
   source                = "toluna-terraform/vpces/aws"
   version               = "~>0.0.5"
+  region                = data.aws_region.current.name
 
   count                 = (var.create_ecs_vpce ? 1 : 0)
 
