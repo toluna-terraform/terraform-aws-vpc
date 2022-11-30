@@ -48,8 +48,8 @@ resource "aws_iam_instance_profile" "nat_instance_profile" {
 }
 
 resource "aws_network_interface" "network_interface" {
-  subnet_id             = var.public_subnets_ids[0]
   source_dest_check     = false
+  subnet_id             = var.public_subnets_ids[0]
   security_groups       = [aws_security_group.nat_instance_sg.id]
 
   tags = {
@@ -65,17 +65,38 @@ resource "aws_route" "route_to_nat_instace" {
   route_table_id            = tolist(data.aws_route_tables.route_tables_of_private_networks.ids[*])[count.index]
 }
 
+# resource "tls_private_key" "ssh" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
+
+# resource "aws_key_pair" "ssh" {
+#   key_name = "ec2-nat-instance-${var.env_name}"
+#   public_key = tls_private_key.ssh.public_key_openssh
+# }
+
+# resource "aws_ssm_parameter" "secret" {
+#   name        = "/infra/ec2-nat-instance-${var.env_name}/key"
+#   description = "ec2-nat-instance-${var.env_name} ssh key"
+#   type        = "SecureString"
+#   value       = tls_private_key.ssh.private_key_pem
+
+#   tags = {
+#   }
+# }
+
 // Creating NAT Instance.
 resource "aws_instance" "nat_instance" {
   // Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs.
   instance_type         = var.nat_instance_type
+  # key_name              = aws_key_pair.ssh.key_name
   ami                   = data.aws_ami.amazon_linux.id
   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   user_data             = "${data.template_file.nat_instance_setup_template.rendered}"
   
   network_interface {
-    network_interface_id = aws_network_interface.network_interface.id
     device_index = 0
+    network_interface_id = aws_network_interface.network_interface.id
   }
 
   tags = {

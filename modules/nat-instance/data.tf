@@ -21,6 +21,7 @@ most_recent = true
 data "template_file" "nat_instance_setup_template" {
   template = file("${path.module}/nat-instance-setup.sh.tpl")
   vars = {
+    cidr_block = "${data.aws_vpc.current_vpc.cidr_block}"
   }
   // Vars maybe used in the future.
 }
