@@ -11,6 +11,14 @@ resource "aws_security_group" "nat_instance_sg" {
         prefix_list_ids = []
     }
 
+    ingress {
+        from_port       = 22
+        to_port         = 22
+        protocol        = "-1"
+        cidr_blocks     = ["0.0.0.0/0"]
+        prefix_list_ids = []
+    }
+
     egress {
         from_port       = 0
         to_port         = 0
