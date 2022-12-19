@@ -122,7 +122,7 @@ resource "aws_key_pair" "ssh2" {
   public_key = tls_private_key.ssh2.public_key_openssh
 }
 
-resource "aws_ssm_parameter" "secret" {
+resource "aws_ssm_parameter" "secret2" {
   name        = "/infra/ec2-private-${var.env_name}/key"
   description = "ec2-private-${var.env_name} ssh key"
   type        = "SecureString"
