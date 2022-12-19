@@ -8,7 +8,7 @@
 # sysctl -q -w net.ipv4.ip_forward=1
 # sysctl -q -w net.ipv4.conf.eth0.send_redirects=0
 # iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-# systemctl restart amazon-ssm-agent.service"
+# systemctl restart amazon-ssm-agent.service
 
 # NAT_SERVICE_CONFIG="[Unit]
 # Description = Nat-instance service
@@ -29,11 +29,12 @@
 
 #!/bin/bash
 sysctl -w net.ipv4.ip_forward=1
-/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sysctl -q -w net.ipv4.conf.eth0.send_redirects=0
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 systemctl restart amazon-ssm-agent.service
-yum update -y
-yum install iptables-services -y
-/sbin/iptables-save > /etc/sysconfig/iptables
+# yum update -y
+# yum install iptables-services -y
+# /sbin/iptables-save > /etc/sysconfig/iptables
 systemctl enable iptables
 systemctl start iptables
 # # Adding cron for security updates.

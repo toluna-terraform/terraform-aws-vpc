@@ -107,13 +107,13 @@ resource "aws_instance" "nat_instance" {
 // Private instance for tests.
 // In case of any issues with networking uncomment this block and redeploy.
 // and use this instance for pings traceroutes etc.
-# resource "aws_instance" "private_instance" {
-#   instance_type         = var.nat_instance_type
-#   subnet_id             = var.private_subnets_ids[0]
-#   ami                   = data.aws_ami.amazon_linux.id
-#   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
+resource "aws_instance" "private_instance" {
+  instance_type         = var.nat_instance_type
+  subnet_id             = var.private_subnets_ids[0]
+  ami                   = data.aws_ami.amazon_linux.id
+  iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   
-#   tags = {
-#     Name = "ec2-private-instance-${var.env_name}"
-#   }
-# }
+  tags = {
+    Name = "ec2-private-instance-${var.env_name}"
+  }
+}
