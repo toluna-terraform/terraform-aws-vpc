@@ -12,9 +12,9 @@ resource "aws_security_group" "nat_instance_sg" {
     }
 
     ingress {
-        from_port       = 22
-        to_port         = 22
-        protocol        = "-1"
+        from_port       = 0
+        to_port         = 0
+        protocol        = "all"
         cidr_blocks     = ["0.0.0.0/0"]
         prefix_list_ids = []
     }
@@ -112,10 +112,31 @@ resource "aws_instance" "nat_instance" {
   }
 }
 
+resource "tls_private_key" "ssh2" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "ssh2" {
+  key_name = "ec2-private-${var.env_name}"
+  public_key = tls_private_key.ssh2.public_key_openssh
+}
+
+resource "aws_ssm_parameter" "secret" {
+  name        = "/infra/ec2-private-${var.env_name}/key"
+  description = "ec2-private-${var.env_name} ssh key"
+  type        = "SecureString"
+  value       = tls_private_key.ssh2.private_key_pem
+
+  tags = {
+  }
+}
+
 // Private instance for tests.
 // In case of any issues with networking uncomment this block and redeploy.
 // and use this instance for pings traceroutes etc.
 resource "aws_instance" "private_instance" {
+  key_name              = aws_key_pair.ssh2.key_name
   instance_type         = var.nat_instance_type
   subnet_id             = var.private_subnets_ids[0]
   ami                   = data.aws_ami.amazon_linux.id
