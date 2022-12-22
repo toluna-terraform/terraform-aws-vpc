@@ -88,7 +88,6 @@ module "nat_instance" {
   nat_instance_type     = var.nat_instance_type
   public_subnets_ids    = module.vpc.public_subnets
   private_subnets_ids   = module.vpc.private_subnets
-  create_test_instance  = var.create_test_instance
   
   depends_on = [
     module.vpc
