@@ -47,6 +47,12 @@
      default = false
  }
 
+  variable "create_test_instance" {
+     description = "Set to true to create a test instance which will be deployed on private network for debugging network issues."
+     type = bool
+     default = false
+ }
+
  variable "nat_instance_type" {
      description = "Amazon linux instance type for NAT instance. The instance type affects the network performace (and cost). See the link in vpc.tf"
      type        = string

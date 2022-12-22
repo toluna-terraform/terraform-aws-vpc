@@ -113,7 +113,7 @@ resource "tls_private_key" "test_instance_private_key" {
 resource "aws_key_pair" "test_instance_key_pair" {
   count      = var.create_test_instance ? 1 : 0
   key_name   = "ec2-test-instance-${var.env_name}"
-  public_key = tls_private_key.test_instance_private_key.public_key_openssh
+  public_key = tls_private_key.test_instance_private_key[count.index].public_key_openssh
 }
 
 resource "aws_ssm_parameter" "test_instance_ssm" {
@@ -121,7 +121,7 @@ resource "aws_ssm_parameter" "test_instance_ssm" {
   name        = "/infra/ec2-test-instance-${var.env_name}/key"
   description = "ec2-test-instance-${var.env_name} ssh key"
   type        = "SecureString"
-  value       = tls_private_key.test_instance_private_key.private_key_pem
+  value       = tls_private_key.test_instance_private_key[count.index].private_key_pem
 
   tags = {
   }
@@ -131,13 +131,13 @@ resource "aws_ssm_parameter" "test_instance_ssm" {
 // In case of any issues with networking use this instance for pings traceroutes etc.
 resource "aws_instance" "private_instance" {
   count                 = var.create_test_instance ? 1 : 0
-  key_name              = aws_key_pair.test_instance_key_pair.key_name
+  key_name              = aws_key_pair.test_instance_key_pair[count.index].key_name
   instance_type         = var.nat_instance_type
   subnet_id             = var.private_subnets_ids[0]
   ami                   = data.aws_ami.amazon_linux.id
   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   
   tags = {
-    Name = "ec2-test-instance-instance-${var.env_name}"
+    Name = "ec2-test-instance-${var.env_name}"
   }
 }

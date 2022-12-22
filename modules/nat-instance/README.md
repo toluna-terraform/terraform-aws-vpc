@@ -30,7 +30,6 @@ By default this module will provision:
 The type of nat instance.<br>
 By default `nat_instance_type` is `"t3.micro"`.<br>
 in order to change the default add an attribute `nat_instance_type` with desired value.<br>
-You can find a list of all instances types [here](https://aws.amazon.com/ec2/instance-types/)<br>
 <u>In case of debugging you need to open an SSH port because inbound traffic from the internet is blocked by default</u>.
 ```hcl
 module "aws_vpc" {
@@ -45,6 +44,32 @@ module "aws_vpc" {
   nat_instance_type     = "<string>"
 }
 ```
+You can find a list of all instances types [here](https://aws.amazon.com/ec2/instance-types/)<br>
+Or use the following command to determine which instance type is best for your needs:
+```
+aws ec2 describe-instance-types --filters "Name=instance-type,Values=t3.*" --query "sort_by(InstanceTypes,&MemoryInfo.SizeInMiB)[*].{InstanceType:InstanceType,Network:NetworkInfo.NetworkPerformance,CPU:VCpuInfo.DefaultVCpus,Memory:MemoryInfo.SizeInMiB}" --output table
+```
+## <ins>Output</ins>
+```yaml
+------------------------------------------------------
+|                DescribeInstanceTypes               |
++-----+----------------+---------+-------------------+
+| CPU | InstanceType   | Memory  |      Network      |
++-----+----------------+---------+-------------------+
+|  2  |  t3.nano       |  512    |  Up to 5 Gigabit  |
+|  2  |  t3.micro      |  1024   |  Up to 5 Gigabit  |
+|  2  |  t3.small      |  2048   |  Up to 5 Gigabit  |
+|  2  |  t3.medium     |  4096   |  Up to 5 Gigabit  |
+|  2  |  t3.large      |  8192   |  Up to 5 Gigabit  |
+|  4  |  t3.xlarge     |  16384  |  Up to 5 Gigabit  |
+|  8  |  t3.2xlarge    |  32768  |  Up to 5 Gigabit  |
++-----+----------------+---------+-------------------+
+```
+- Don't forget that it affects cost significantly.
+
+## <ins>Compare NAT gateways and NAT instances.</ins><br>
+https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html
+
 ## <ins>Test Instance<ins>.
 Test instance which is connected only to private network to debug network issues.<br>
 By default `create_test_instance` is `false`.<br>

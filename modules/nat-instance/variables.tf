@@ -31,8 +31,7 @@ variable "aws_vpc_id" {
 }
 
 variable "nat_instance_type" {
-  type    = string
-  default = "t3.micro"
+  type = string
 }
 
 variable "number_of_azs" {
