@@ -38,11 +38,6 @@ variable "number_of_azs" {
   type = number
 }
 
-variable "create_test_instance" {
-  type    = bool
-  default = false
-}
-
 variable "private_subnets_ids" {}
 
 variable "public_subnets_ids" {}

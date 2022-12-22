@@ -70,26 +70,6 @@ aws ec2 describe-instance-types --filters "Name=instance-type,Values=t3.*" --que
 ## <ins>Compare NAT gateways and NAT instances.</ins><br>
 https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html
 
-## <ins>Test Instance<ins>.
-Test instance which is connected only to private network to debug network issues.<br>
-By default `create_test_instance` is `false`.<br>
-in order to change the default add an attribute `create_test_instance` with desired value.<br>
-```hcl
-module "aws_vpc" {
-  source                = "toluna-terraform/vpc/aws"
-  version               = "<version>"
-
-  env_name              = "<string>"
-  env_type              = "<string>"
-  env_index             = "<int>"
-
-  create_nat_instance   = "<bool>"
-  nat_instance_type     = "<string>"
-  create_test_instance  = "<bool>"
-}
-```
-
-
 ## Requirements
 
 No requirements.
@@ -114,16 +94,12 @@ No modules.
 | [aws_iam_role.ssm_agent_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.attach_ssm_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_instance.nat_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
-| [aws_instance.private_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
 | [aws_key_pair.nat_instance_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
-| [aws_key_pair.test_instance_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair) | resource |
 | [aws_network_interface.network_interface](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_interface) | resource |
 | [aws_route.route_to_nat_instace](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_security_group.nat_instance_sg](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_ssm_parameter.nat_instance_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
-| [aws_ssm_parameter.test_instance_ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 | [tls_private_key.nat_instance_private_key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
-| [tls_private_key.test_instance_private_key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
 | [aws_ami.amazon_linux](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_instance.nat_instance_data](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/instance) | data source |
 | [aws_route_tables.route_tables_of_private_networks](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables) | data source |
@@ -138,9 +114,8 @@ No modules.
 | <a name="input_amazon_ec2_linux_image"></a> [amazon\_ec2\_linux\_image](#input\_amazon\_ec2\_linux\_image) | Amazon linux image for NAT instance. | `string` | `"amzn2-ami-kernel-5.10-hvm-*"` | no |
 | <a name="input_amazon_owner_id"></a> [amazon\_owner\_id](#input\_amazon\_owner\_id) | Amazong owner id. | `string` | `"137112412989"` | no |
 | <a name="input_aws_vpc_id"></a> [aws\_vpc\_id](#input\_aws\_vpc\_id) | n/a | `string` | n/a | yes |
-| <a name="input_create_test_instance"></a> [create\_test\_instance](#input\_create\_test\_instance) | n/a | `bool` | `false` | no |
 | <a name="input_env_name"></a> [env\_name](#input\_env\_name) | n/a | `string` | n/a | yes |
-| <a name="input_nat_instance_type"></a> [nat\_instance\_type](#input\_nat\_instance\_type) | n/a | `string` | `"t3.micro"` | no |
+| <a name="input_nat_instance_type"></a> [nat\_instance\_type](#input\_nat\_instance\_type) | n/a | `string` | n/a | yes |
 | <a name="input_number_of_azs"></a> [number\_of\_azs](#input\_number\_of\_azs) | n/a | `number` | n/a | yes |
 | <a name="input_private_subnets_ids"></a> [private\_subnets\_ids](#input\_private\_subnets\_ids) | n/a | `any` | n/a | yes |
 | <a name="input_public_subnets_ids"></a> [public\_subnets\_ids](#input\_public\_subnets\_ids) | n/a | `any` | n/a | yes |
