@@ -1,4 +1,3 @@
-// Module's variables.
 variable "amazon_ec2_linux_image" {
   description = "Amazon linux image for NAT instance."
   type        = string
@@ -23,10 +22,22 @@ variable "ssm_agent_policy" {
   default     = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-// Shared variables.
-variable "env_name" { type = string }
-variable "aws_vpc_id" { type = string }
-variable "nat_instance_type" { type = string }
+variable "env_name" {
+  type = string 
+}
+
+variable "aws_vpc_id" {
+  type = string
+}
+
+variable "nat_instance_type" {
+  type = string
+}
+
+variable "number_of_azs" {
+  type = number
+}
+
 variable "private_subnets_ids" {}
+
 variable "public_subnets_ids" {}
-variable "number_of_azs" { type = number }
