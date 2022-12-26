@@ -2,6 +2,10 @@
      type = string
      description = "Environment unique identifier"
  }
+ variable "app_name" {
+     type = string
+     description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)"
+ }
  variable "number_of_azs" {
      type = number
      default = 2
@@ -69,4 +73,7 @@ variable "default_network_acl_egress" {
     type = list(map(string))
     description = "List of ACL egress rules"
     default = [{ "rule_no": 100, "action": "allow", "cidr_block": "0.0.0.0/0", "from_port": 0, "protocol": "-1",  "to_port": 0 } ]
+}
+variable "lookup_ssm_param" {
+  default = true
 }
