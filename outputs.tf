@@ -37,4 +37,6 @@ output "default_dhcp_options" {
 output "aws_region" {
     value = data.aws_region.current.name
 }
-
+# output "network_address_range" {
+#   value = "${ var.lookup_ssm_param == false ? cidrsubnet(data.aws_ssm_parameter.network_range.value, 5, var.env_index) : cidrsubnet(data.aws_ssm_parameter.network_range_per_app[0].value, 5, var.env_index) }"
+# }
