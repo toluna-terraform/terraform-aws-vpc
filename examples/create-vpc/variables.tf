@@ -1,19 +1,14 @@
+variable "env_name" {
+    type = string
+    nullable = true
+    default = null
+    description = "For backward compatibility only - will be removed in the future."
+}
 variable "app_name" {
     type = string
     default = "NONE"
     description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)"
 }
-
-variable "environment" {
-    type = string
-    description = ""
-}
-
-variable "multi_service" {
-    type = bool
-    default = false
-}
-
 variable "number_of_azs" {
     type = number
     description = "Number of AZs to created in the VPC."
