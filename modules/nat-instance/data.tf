@@ -36,6 +36,6 @@ data "aws_route_tables" "route_tables_of_private_networks" {
     
     filter {
     name   = "tag:Name"
-    values = ["${var.env_name}-private*"]
+    values = ["${var.name_suffix}-private*"]
   }
 }

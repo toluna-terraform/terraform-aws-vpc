@@ -1,9 +1,14 @@
 locals {
+  environment = terraform.workspace
+  name_suffix = "${var.app_name}-${local.environment}"
   # calualte available AZs for current region
   aws_azs = slice(data.aws_availability_zones.available.names[*], 0, var.number_of_azs)
 
   # calculate VPC and subnets CIDRs
-  vpc_cidr         = "${ var.lookup_ssm_param == false ? cidrsubnet(data.aws_ssm_parameter.network_range.value, 5, var.env_index) : cidrsubnet(data.aws_ssm_parameter.network_range_per_app[0].value, 5, var.env_index) }"
+  # vpc_cidr         = cidrsubnet(data.aws_ssm_parameter.network_range[0].value, 5, var.env_index)
+
+  vpc_cirdr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
+  vpc_cidr         = cidrsubnet(local.vpc_cirdr_value, 5, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 2, 0), cidrsubnet(local.vpc_cidr, 2, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 3)])
 
@@ -15,7 +20,7 @@ locals {
 module "vpc" {
   source               = "terraform-aws-modules/vpc/aws"
   version              = "~>3.13.0"
-  name                 = var.env_name
+  name                 = local.name_suffix
   cidr                 = local.vpc_cidr
   azs                  = local.aws_azs
   private_subnets      = local.private_subnets
@@ -32,7 +37,7 @@ module "vpc" {
   default_network_acl_egress = var.default_network_acl_egress
 
   tags = tomap({
-    environment      = var.env_name,
+    environment      = local.name_suffix,
     application_role = "network",
     created_by       = "terraform"
   })
@@ -69,7 +74,7 @@ module "ecs_vpce" {
 
   count                 = (var.create_ecs_vpce ? 1 : 0)
 
-  env_name              = var.env_name
+  env_name              = local.name_suffix
   create_ecs_vpce       = var.create_ecs_vpce
   aws_vpc_id            = module.vpc.vpc_id
   private_subnets_ids   = module.vpc.private_subnets
@@ -82,7 +87,9 @@ module "ecs_vpce" {
 module "nat_instance" {
   source                = "./modules/nat-instance"
   count                 = (var.create_nat_instance ? 1 : 0)
-  env_name              = var.env_name
+  # app_name              = var.app_name
+  # environment           = var.environment
+  name_suffix           = local.name_suffix
   number_of_azs         = var.number_of_azs
   aws_vpc_id            = module.vpc.vpc_id
   nat_instance_type     = var.nat_instance_type
@@ -101,5 +108,7 @@ module "private_api_vpce" {
   private_subnets_ids       = module.vpc.private_subnets
   default_security_group_id = module.vpc.default_security_group_id
   vpc_cidr_block            = module.vpc.vpc_cidr_block
-  env_name                  = var.env_name
+  # app_name                  = var.app_name
+  # environment               = var.environment
+  name_suffix           = local.name_suffix
 }

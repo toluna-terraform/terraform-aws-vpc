@@ -1,10 +1,14 @@
  variable "env_name" {
-     type = string
-     description = "Environment unique identifier"
+    type = string
+    nullable = true
+    default = null
+    description = "For backward compatibility only - will be removed in the future."
  }
  variable "app_name" {
      type = string
-     description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)"
+     nullable = true
+     default = "NONE"
+     description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)."
  }
  variable "number_of_azs" {
      type = number
@@ -73,7 +77,4 @@ variable "default_network_acl_egress" {
     type = list(map(string))
     description = "List of ACL egress rules"
     default = [{ "rule_no": 100, "action": "allow", "cidr_block": "0.0.0.0/0", "from_port": 0, "protocol": "-1",  "to_port": 0 } ]
-}
-variable "lookup_ssm_param" {
-  default = true
 }

@@ -22,8 +22,9 @@ variable "ssm_agent_policy" {
   default     = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-variable "env_name" {
-  type = string 
+variable "name_suffix" {
+    type = string
+    description = ""
 }
 
 variable "aws_vpc_id" {
