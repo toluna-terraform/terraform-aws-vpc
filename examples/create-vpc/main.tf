@@ -1,7 +1,8 @@
 module "example_vpc" {
     source = "../.."
 
-    env_name = var.env_name
+    app_name = ""
+    environment = ""
     number_of_azs = var.number_of_azs
     env_type = var.env_type
     env_index = var.env_index 

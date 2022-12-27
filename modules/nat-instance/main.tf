@@ -1,7 +1,7 @@
 // Create security groups that allows all traffic from VPC's cidr to NAT-Instance.
 resource "aws_security_group" "nat_instance_sg" {
     vpc_id = var.aws_vpc_id
-    name   = "${var.env_name}-nat-instance"
+    name   = "${var.name_suffix}-nat-instance"
 
     ingress {
         from_port       = 0
@@ -18,13 +18,13 @@ resource "aws_security_group" "nat_instance_sg" {
         cidr_blocks     = ["0.0.0.0/0"]
     }
     tags = {
-        Name = "sg-nat-instance-${var.env_name}"
+        Name = "sg-nat-instance-${var.name_suffix}"
     }
 }
 
 // Create role.
 resource "aws_iam_role" "ssm_agent_role" {
-  name               = "iam-role-ssm-agent-${var.env_name}"
+  name               = "iam-role-ssm-agent-${var.name_suffix}"
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": {
@@ -43,7 +43,7 @@ resource "aws_iam_role_policy_attachment" "attach_ssm_role" {
 
 // Create instance profile.
 resource "aws_iam_instance_profile" "nat_instance_profile" {
-  name = "iam-profile-nat-instance-${var.env_name}"
+  name = "iam-profile-nat-instance-${var.name_suffix}"
   role = aws_iam_role.ssm_agent_role.name
 }
 
@@ -53,7 +53,7 @@ resource "aws_network_interface" "network_interface" {
   security_groups   = [aws_security_group.nat_instance_sg.id]
 
   tags = {
-    Name = "nat-instance-network-interface-${var.env_name}"
+    Name = "nat-instance-network-interface-${var.name_suffix}"
   }
 }
 
@@ -71,13 +71,13 @@ resource "tls_private_key" "nat_instance_private_key" {
 }
 
 resource "aws_key_pair" "nat_instance_key_pair" {
-  key_name   = "ec2-nat-instance-${var.env_name}"
+  key_name   = "ec2-nat-instance-${var.name_suffix}"
   public_key = tls_private_key.nat_instance_private_key.public_key_openssh
 }
 
 resource "aws_ssm_parameter" "nat_instance_ssm" {
-  name        = "/infra/ec2-nat-instance-${var.env_name}/key"
-  description = "ec2-nat-instance-${var.env_name} ssh key"
+  name        = "/infra/ec2-nat-instance-${var.name_suffix}/key"
+  description = "ec2-nat-instance-${var.name_suffix} ssh key"
   type        = "SecureString"
   value       = tls_private_key.nat_instance_private_key.private_key_pem
 
@@ -100,6 +100,6 @@ resource "aws_instance" "nat_instance" {
   }
 
   tags = {
-    Name = "ec2-nat-instance-${var.env_name}"
+    Name = "ec2-nat-instance-${var.name_suffix}"
   }
 }

@@ -3,7 +3,7 @@ resource "aws_security_group" "vpce_access" {
     description = "Access control for execute api vpc endopint"
     vpc_id = var.vpc_id
     tags = tomap({
-        environment      = var.env_name,
+        environment      = var.name_suffix,
         application_role = "network",
         created_by       = "terraform"
     })

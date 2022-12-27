@@ -1,7 +1,17 @@
-variable "env_name" {
+variable "app_name" {
     type = string
-    description = "Environment name for which VPC is getting created."
-    default = "test-create-vpc"
+    default = "NONE"
+    description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)"
+}
+
+variable "environment" {
+    type = string
+    description = ""
+}
+
+variable "multi_service" {
+    type = bool
+    default = false
 }
 
 variable "number_of_azs" {
