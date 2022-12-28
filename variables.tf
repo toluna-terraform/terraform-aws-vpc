@@ -6,9 +6,15 @@
  }
  variable "app_name" {
      type = string
-     nullable = true
+     nullable = false
      default = "NONE"
-     description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)."
+     description = "The name of the application to be deployed - used in name perfix."
+ }
+ variable "multi_service" {
+    type = bool
+    nullable = true
+    default = false
+    description = "Set to true if you want to host multiple services/apps on a single account."
  }
  variable "number_of_azs" {
      type = number

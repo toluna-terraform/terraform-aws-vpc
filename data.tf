@@ -1,12 +1,12 @@
 data "aws_availability_zones" "available" {}
 
 data "aws_ssm_parameter" "network_range" {
-    count = var.app_name == "NONE" ? 1 : 0
+    count = var.multi_service ? 0 : 1
     name = "/infra/network_address_range"
 }
 
 data "aws_ssm_parameter" "network_range_per_app" {
-    count = var.app_name != "NONE" ? 1 : 0
+    count = var.multi_service ? 1 : 0
     name = "/infra/${var.app_name}/network_address_range"
 }
 

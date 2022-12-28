@@ -7,7 +7,7 @@ locals {
   # calculate VPC and subnets CIDRs
   # vpc_cidr         = cidrsubnet(data.aws_ssm_parameter.network_range[0].value, 5, var.env_index)
 
-  vpc_cirdr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
+  vpc_cirdr_value  = var.multi_service ? data.aws_ssm_parameter.network_range_per_app[0].value : data.aws_ssm_parameter.network_range[0].value
   vpc_cidr         = cidrsubnet(local.vpc_cirdr_value, 5, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 2, 0), cidrsubnet(local.vpc_cidr, 2, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 3)])
