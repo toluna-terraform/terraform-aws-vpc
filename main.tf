@@ -1,14 +1,14 @@
 locals {
   environment = terraform.workspace
-  name_suffix = "${var.app_name}-${local.environment}"
+  name_suffix = var.app_name == "NONE" ? "${local.environment}" : "${var.app_name}-${local.environment}"
   # calualte available AZs for current region
   aws_azs = slice(data.aws_availability_zones.available.names[*], 0, var.number_of_azs)
 
   # calculate VPC and subnets CIDRs
   # vpc_cidr         = cidrsubnet(data.aws_ssm_parameter.network_range[0].value, 5, var.env_index)
 
-  vpc_cirdr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
-  vpc_cidr         = cidrsubnet(local.vpc_cirdr_value, 5, var.env_index)
+  vpc_cidr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
+  vpc_cidr         = cidrsubnet(local.vpc_cidr_value, 5, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 2, 0), cidrsubnet(local.vpc_cidr, 2, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 3)])
 
