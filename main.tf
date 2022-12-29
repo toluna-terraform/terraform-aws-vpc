@@ -1,6 +1,6 @@
 locals {
   environment = terraform.workspace
-  name_suffix = var.app_name == "NONE" ? "${local.environment}" : "${var.app_name}-${local.environment}"
+  name_suffix = var.app_name == "NONE" ? "${var.env_name}" : "${var.app_name}-${local.environment}"
   # calualte available AZs for current region
   aws_azs = slice(data.aws_availability_zones.available.names[*], 0, var.number_of_azs)
 
