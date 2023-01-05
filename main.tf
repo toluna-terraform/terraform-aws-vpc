@@ -112,3 +112,11 @@ module "private_api_vpce" {
   # environment               = var.environment
   name_suffix           = local.name_suffix
 }
+
+module "share_vpc" {
+  source                    = "./modules/shared-vpc"
+  count = var.shared_with_organization_unit ? 1 : 0
+  env_name = var.env_name
+  shared_with_organization_unit = var.shared_with_organization_unit
+  subnets = concat(module.vpc.private_subnet_arns,module.vpc.public_subnet_arns)
+}
