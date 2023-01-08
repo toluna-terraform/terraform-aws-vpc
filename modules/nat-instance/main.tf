@@ -7,7 +7,7 @@ resource "aws_security_group" "nat_instance_sg" {
         from_port       = 0
         to_port         = 0
         protocol        = "all"
-        cidr_blocks     = [data.aws_vpc.current_vpc.cidr_block]
+        cidr_blocks     = [var.vpc_cidr]
         prefix_list_ids = []
     }
 
@@ -59,10 +59,10 @@ resource "aws_network_interface" "network_interface" {
 
 // Route private networks through NAT-Instance network interface.
 resource "aws_route" "route_to_nat_instace" {
+  count = length(var.private_rtb_ids)
   destination_cidr_block = "0.0.0.0/0"
-  count                  = var.number_of_azs
   network_interface_id   = aws_network_interface.network_interface.id
-  route_table_id         = tolist(data.aws_route_tables.route_tables_of_private_networks.ids[*])[count.index]
+  route_table_id = var.private_rtb_ids[count.index]
 }
 
 resource "tls_private_key" "nat_instance_private_key" {
@@ -92,7 +92,7 @@ resource "aws_instance" "nat_instance" {
   key_name              = aws_key_pair.nat_instance_key_pair.key_name
   ami                   = data.aws_ami.amazon_linux.id
   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
-  user_data             = "${data.template_file.nat_instance_setup_template.rendered}"
+  user_data             = file("${path.module}/nat-instance-setup.sh")
   
   network_interface {
     device_index         = 0

@@ -30,6 +30,10 @@ variable "aws_vpc_id" {
   type = string
 }
 
+variable "vpc_cidr" {
+  type = string
+}
+
 variable "nat_instance_type" {
   type = string
 }
@@ -38,6 +42,14 @@ variable "number_of_azs" {
   type = number
 }
 
-variable "private_subnets_ids" {}
+variable "private_subnets_ids" {
+  type = list(string)
+}
 
-variable "public_subnets_ids" {}
+variable "public_subnets_ids" {
+  type = list(string)
+}
+
+variable "private_rtb_ids" {
+  type = list(string)
+}

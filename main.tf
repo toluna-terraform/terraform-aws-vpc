@@ -86,8 +86,10 @@ module "nat_instance" {
   number_of_azs         = var.number_of_azs
   aws_vpc_id            = module.vpc.vpc_id
   nat_instance_type     = var.nat_instance_type
+  vpc_cidr              = module.vpc.vpc_cidr_block
   public_subnets_ids    = module.vpc.public_subnets
   private_subnets_ids   = module.vpc.private_subnets
+  private_rtb_ids       = module.vpc.private_route_table_ids
   
   depends_on = [
     module.vpc

@@ -3,7 +3,7 @@ NAT_INSTANCE_CONFIG="#!/bin/bash
 set -x
 # wait for eth0
 while ! ip link show dev eth0; do
-  sleep 3
+  sleep 1
 done
 sysctl -q -w net.ipv4.ip_forward=1
 sysctl -q -w net.ipv4.conf.eth0.send_redirects=0
