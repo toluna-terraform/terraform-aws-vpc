@@ -26,6 +26,12 @@
      description = "The VPC CIDR subnet index, extracted from the whole available network address range of the account."
  }
 
+ variable "newbits" {
+    type = number
+    default = 5
+    nullable = false
+ }
+
  variable "create_tgw_attachment"{
      type = bool
      default = false
