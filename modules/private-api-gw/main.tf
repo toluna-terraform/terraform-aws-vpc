@@ -18,14 +18,14 @@ resource "aws_vpc_endpoint" "execute_api" {
   private_dns_enabled = true
   auto_accept         = true
   tags = tomap({
-    environment      = var.env_name,
+    environment      = var.name_suffix,
     application_role = "network",
     created_by       = "terraform"
   })
 }
 
 resource "aws_lb_target_group" "tg_vpce" {
-  name        = "tg-${var.env_name}-api-gw"
+  name        = "tg-${var.name_suffix}-api-gw"
   port        = 443
   protocol    = "HTTPS"
   target_type = "ip"
@@ -58,7 +58,7 @@ resource "aws_lb_target_group_attachment" "tg_vpce" {
   export api gateway related data as ssm parameters for sam integration
 */
 resource "aws_ssm_parameter" "vpce_id" {
-  name  = "/infra/${var.env_name}/vpce_id"
+  name  = "/infra/${var.name_suffix}/vpce_id"
   type  = "String"
   value = aws_vpc_endpoint.execute_api.id
 }
@@ -67,7 +67,7 @@ resource "aws_ssm_parameter" "vpce_id" {
   export api gateway related data as ssm parameters for sam integration
 */
 resource "aws_ssm_parameter" "private_subnets_ids" {
-  name  = "/infra/${var.env_name}/private_subnets_ids"
+  name  = "/infra/${var.name_suffix}/private_subnets_ids"
   type  = "StringList"
   value = join(",", var.private_subnets_ids)
 }
@@ -76,7 +76,7 @@ resource "aws_ssm_parameter" "private_subnets_ids" {
   export api gateway related data as ssm parameters for sam integration
 */
 resource "aws_ssm_parameter" "vpce_security_groups" {
-  name  = "/infra/${var.env_name}/vpce_security_groups"
+  name  = "/infra/${var.name_suffix}/vpce_security_groups"
   type  = "StringList"
   value = var.default_security_group_id
 }

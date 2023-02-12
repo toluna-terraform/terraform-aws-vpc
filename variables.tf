@@ -1,6 +1,14 @@
  variable "env_name" {
+    type = string
+    nullable = true
+    default = null
+    description = "For backward compatibility only - will be removed in the future."
+ }
+ variable "app_name" {
      type = string
-     description = "Environment unique identifier"
+     nullable = true
+     default = "NONE"
+     description = "App name used for CIDR calulcation (saved in SSM parameter network_address_range with app_name suffix to support multi-serive per account)."
  }
  variable "number_of_azs" {
      type = number
@@ -49,6 +57,12 @@
  
  variable "create_nat_instance" {
      description = "Set to true if you want your private networks to reach the internet"
+     type = bool
+     default = false
+ }
+
+  variable "create_test_instance" {
+     description = "Set to true to create a test instance which will be deployed on private network for debugging network issues."
      type = bool
      default = false
  }

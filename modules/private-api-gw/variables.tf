@@ -14,6 +14,7 @@ variable "vpc_cidr_block" {
   type = string
 }
 
-variable "env_name" {
-  type = string
+variable "name_suffix" {
+    type = string
+    description = ""
 }

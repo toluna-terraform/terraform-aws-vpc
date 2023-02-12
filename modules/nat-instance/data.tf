@@ -17,12 +17,12 @@ most_recent = true
   owners = [var.amazon_owner_id]
 }
 
-// Script to setup the NAT Instance.
+// NAT Instance template.
 data "template_file" "nat_instance_setup_template" {
   template = file("${path.module}/nat-instance-setup.sh.tpl")
   vars = {
+    cidr_block = "${data.aws_vpc.current_vpc.cidr_block}"
   }
-  // Vars maybe used in the future.
 }
 
 // Get NAT Instance data.
@@ -30,12 +30,12 @@ data "aws_instance" "nat_instance_data" {
   instance_id = aws_instance.nat_instance.id
 }
 
-// Get route tables of private networks of current environment.
+// Get route tables of private networks in in provided VPC.
 data "aws_route_tables" "route_tables_of_private_networks" {
   vpc_id   = var.aws_vpc_id
     
     filter {
     name   = "tag:Name"
-    values = ["${var.env_name}-private*"]
+    values = ["${var.name_suffix}-private*"]
   }
 }
