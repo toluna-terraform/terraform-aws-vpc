@@ -28,7 +28,7 @@
 
  variable "newbits" {
     type = number
-    default = 4
+    default = 5
     nullable = false
  }
 
