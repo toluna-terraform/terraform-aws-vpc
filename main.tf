@@ -3,7 +3,7 @@ locals {
   aws_azs = slice(data.aws_availability_zones.available.names[*], 0, var.number_of_azs)
 
   # calculate VPC and subnets CIDRs
-  vpc_cidr         = cidrsubnet(data.aws_ssm_parameter.network_range.value, 4, var.env_index)
+  vpc_cidr         = cidrsubnet(data.aws_ssm_parameter.network_range.value, var.newbits, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 3, 0), cidrsubnet(local.vpc_cidr, 3, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 3, 2), cidrsubnet(local.vpc_cidr, 3, 3)])
   database_subnets = tolist([cidrsubnet(local.vpc_cidr, 3, 4), cidrsubnet(local.vpc_cidr, 3, 5)])
