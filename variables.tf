@@ -30,19 +30,21 @@
     type = number
     default = 5
     nullable = false
+    description = "Used to calculate VPCs"
  }
 
  variable "subnet_newbits" {
     type = number
     default = 2
     nullable = false
+    description = "Used to calculate subnets in VPCs - if you pass newbits variable make sure to pass subnet_newbits also"
  }
 
  variable "create_db_subnets" {
     type = bool
     default = false
     description = "Whether to create default database subnet groups"
-    nullable = true
+    nullable = false
  }
 
  variable "create_tgw_attachment"{
