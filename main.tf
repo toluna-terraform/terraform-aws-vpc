@@ -7,9 +7,10 @@ locals {
   # calculate VPC and subnets CIDRs
   vpc_cidr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
   vpc_cidr         = cidrsubnet(local.vpc_cidr_value, var.newbits, var.env_index)
-  public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 2, 0), cidrsubnet(local.vpc_cidr, 2, 1)])
-  private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 3)])
-  database_subnets = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 2)])
+  # subnet_newbits = 2
+  public_subnets   = tolist([cidrsubnet(local.vpc_cidr, var.subnet_newbits, 0), cidrsubnet(local.vpc_cidr, var.subnet_newbits, 1)])
+  private_subnets  = tolist([cidrsubnet(local.vpc_cidr, var.subnet_newbits, 2), cidrsubnet(local.vpc_cidr, var.subnet_newbits, 3)])
+  database_subnets = tolist([cidrsubnet(local.vpc_cidr, var.subnet_newbits, 4), cidrsubnet(local.vpc_cidr, var.subnet_newbits, 5)])
 
   # 10.69.0.0/20
   domain_name = data.aws_ssm_parameter.domain_name.value

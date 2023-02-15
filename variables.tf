@@ -32,6 +32,12 @@
     nullable = false
  }
 
+ variable "subnet_newbits" {
+    type = number
+    default = 2
+    nullable = false
+ }
+
  variable "create_db_subnets" {
     type = bool
     default = false
