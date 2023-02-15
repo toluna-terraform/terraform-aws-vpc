@@ -25,8 +25,8 @@ module "vpc" {
   azs                              = local.aws_azs
   private_subnets                  = local.private_subnets
   public_subnets                   = local.public_subnets
+  create_database_subnet_group     = var.create_db_subnets
   database_subnets                 = local.database_subnets
-  create_database_subnet_group     = true
   enable_dns_hostnames             = true
   enable_nat_gateway               = var.create_nat_gateway
   single_nat_gateway               = var.create_nat_gateway

@@ -32,6 +32,13 @@
     nullable = false
  }
 
+ variable "create_db_subnets" {
+    type = bool
+    default = false
+    description = "Whether to create default database subnet groups"
+    nullable = true
+ }
+
  variable "create_tgw_attachment"{
      type = bool
      default = false
