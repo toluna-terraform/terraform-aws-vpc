@@ -9,30 +9,34 @@ locals {
   vpc_cidr         = cidrsubnet(local.vpc_cidr_value, var.newbits, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 2, 0), cidrsubnet(local.vpc_cidr, 2, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 3)])
+  database_subnets = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 2)])
 
+  # 10.69.0.0/20
   domain_name = data.aws_ssm_parameter.domain_name.value
   dns_servers = tolist(split(",", data.aws_ssm_parameter.dns_servers.value))
 }
 
 
 module "vpc" {
-  source               = "terraform-aws-modules/vpc/aws"
-  version              = "~>3.13.0"
-  name                 = local.name_suffix
-  cidr                 = local.vpc_cidr
-  azs                  = local.aws_azs
-  private_subnets      = local.private_subnets
-  public_subnets       = local.public_subnets
-  enable_dns_hostnames = true
-  enable_nat_gateway   = var.create_nat_gateway
-  single_nat_gateway   = var.create_nat_gateway
-  enable_vpn_gateway   = false
+  source                           = "terraform-aws-modules/vpc/aws"
+  version                          = "~>3.13.0"
+  name                             = local.name_suffix
+  cidr                             = local.vpc_cidr
+  azs                              = local.aws_azs
+  private_subnets                  = local.private_subnets
+  public_subnets                   = local.public_subnets
+  database_subnets                 = local.database_subnets
+  create_database_subnet_group     = true
+  enable_dns_hostnames             = true
+  enable_nat_gateway               = var.create_nat_gateway
+  single_nat_gateway               = var.create_nat_gateway
+  enable_vpn_gateway               = false
 
-  enable_dhcp_options = var.enable_dhcp_options
-  dhcp_options_domain_name = local.domain_name
+  enable_dhcp_options              = var.enable_dhcp_options
+  dhcp_options_domain_name         = local.domain_name
   dhcp_options_domain_name_servers = local.dns_servers
 
-  default_network_acl_egress = var.default_network_acl_egress
+  default_network_acl_egress       = var.default_network_acl_egress
 
   tags = tomap({
     environment      = local.name_suffix,
