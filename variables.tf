@@ -32,6 +32,12 @@
     nullable = false
  }
 
+  variable "newbits_subnets" {
+    type = number
+    default = 2
+    nullable = false
+ }
+
  variable "create_tgw_attachment"{
      type = bool
      default = false

@@ -7,8 +7,9 @@ locals {
   # calculate VPC and subnets CIDRs
   vpc_cidr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
   vpc_cidr         = cidrsubnet(local.vpc_cidr_value, var.newbits, var.env_index)
-  public_subnets   = tolist([cidrsubnet(local.vpc_cidr, 2, 0), cidrsubnet(local.vpc_cidr, 2, 1)])
-  private_subnets  = tolist([cidrsubnet(local.vpc_cidr, 2, 2), cidrsubnet(local.vpc_cidr, 2, 3)])
+  public_subnets   = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 0), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 1)])
+  private_subnets  = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 2), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 3)])
+  database_subnets  = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 4), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 5)])
 
   domain_name = data.aws_ssm_parameter.domain_name.value
   dns_servers = tolist(split(",", data.aws_ssm_parameter.dns_servers.value))
@@ -23,6 +24,7 @@ module "vpc" {
   azs                  = local.aws_azs
   private_subnets      = local.private_subnets
   public_subnets       = local.public_subnets
+  database_subnets     = local.database_subnets
   enable_dns_hostnames = true
   enable_nat_gateway   = var.create_nat_gateway
   single_nat_gateway   = var.create_nat_gateway
