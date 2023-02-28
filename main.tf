@@ -9,7 +9,7 @@ locals {
   vpc_cidr         = cidrsubnet(local.vpc_cidr_value, var.newbits, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 0), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 1)])
   private_subnets  = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 2), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 3)])
-  database_subnets  = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 4), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 5)])
+  database_subnets  = var.enable_db_subnets ? ([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 4), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 5)]) : []
 
   domain_name = data.aws_ssm_parameter.domain_name.value
   dns_servers = tolist(split(",", data.aws_ssm_parameter.dns_servers.value))
