@@ -38,6 +38,12 @@
     nullable = false
  }
 
+variable "enable_db_subnets"{
+     type = bool
+     default = false
+     description = "Creates an additional 2 subnets, dedicated for databases. Make sure to have enough space for it (by setting newbits variables), as by default we are allocating the entire vpc range to 4 subnets."
+ }
+
  variable "create_tgw_attachment"{
      type = bool
      default = false
