@@ -25,7 +25,7 @@ resource "aws_vpc_endpoint" "execute_api" {
 }
 
 resource "aws_lb_target_group" "tg_vpce" {
-  name        = "tg-${var.name_suffix}-api-gw"
+  name        = "tg-${terraform.workspace}-api-gw"
   port        = 443
   protocol    = "HTTPS"
   target_type = "ip"
