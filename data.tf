@@ -20,6 +20,8 @@ data "aws_ssm_parameter" "dns_servers" {
 
 data "aws_vpc_dhcp_options" "default_dhcp_options" {
 
+  count = ( var.enable_dhcp_options == false ) ? 1 : 0
+
   filter {
     name   = "key"
     values = [ "domain-name" ]
