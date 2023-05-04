@@ -93,10 +93,18 @@ resource "aws_instance" "nat_instance" {
   ami                   = data.aws_ami.amazon_linux.id
   iam_instance_profile  = aws_iam_instance_profile.nat_instance_profile.name
   user_data             = "${data.template_file.nat_instance_setup_template.rendered}"
+  ebs_optimized 		= true
+  monitoring			= true 
   
   network_interface {
     device_index         = 0
     network_interface_id = aws_network_interface.network_interface.id
+  }
+  
+  # https://www.cloudyali.io/blogs/understanding-instance-metadata-service-imds
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
   }
 
   tags = {

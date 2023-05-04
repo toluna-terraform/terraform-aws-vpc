@@ -59,7 +59,7 @@ resource "aws_lb_target_group_attachment" "tg_vpce" {
 */
 resource "aws_ssm_parameter" "vpce_id" {
   name  = "/infra/${var.name_suffix}/vpce_id"
-  type  = "String"
+  type  = "SecureString"
   value = aws_vpc_endpoint.execute_api.id
 }
 
@@ -68,6 +68,7 @@ resource "aws_ssm_parameter" "vpce_id" {
 */
 resource "aws_ssm_parameter" "private_subnets_ids" {
   name  = "/infra/${var.name_suffix}/private_subnets_ids"
+  # type = "SecureString"
   type  = "StringList"
   value = join(",", var.private_subnets_ids)
 }
@@ -77,6 +78,7 @@ resource "aws_ssm_parameter" "private_subnets_ids" {
 */
 resource "aws_ssm_parameter" "vpce_security_groups" {
   name  = "/infra/${var.name_suffix}/vpce_security_groups"
+  # type = "SecureString"
   type  = "StringList"
   value = var.default_security_group_id
 }
