@@ -96,3 +96,9 @@ variable "default_network_acl_egress" {
     description = "List of ACL egress rules"
     default = [{ "rule_no": 100, "action": "allow", "cidr_block": "0.0.0.0/0", "from_port": 0, "protocol": "-1",  "to_port": 0 } ]
 }
+
+variable "private_subnet_roles" {
+  description = "Additional tags for the private subnets"
+  type        = list(map(string))
+  default     = []
+}
