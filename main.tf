@@ -8,12 +8,12 @@ locals {
   vpc_cidr_value  = var.app_name == "NONE" ? data.aws_ssm_parameter.network_range[0].value : data.aws_ssm_parameter.network_range_per_app[0].value
   vpc_cidr         = cidrsubnet(local.vpc_cidr_value, var.newbits, var.env_index)
   public_subnets   = tolist([cidrsubnet(local.vpc_cidr, var.newbits_subnets, 0), cidrsubnet(local.vpc_cidr, var.newbits_subnets, 1)])
-  private_subnets_count = length(var.private_subnet_roles) == 0 ? 2 : length(var.private_subnet_roles)
+  private_subnets_count = length(var.private_subnet_roles) == 0 ? 1 : length(var.private_subnet_roles)
   private_subnets_az1 = [for t in range(2,local.private_subnets_count*2+2,2): cidrsubnet(local.vpc_cidr, var.newbits_subnets, t)]
   private_subnets_az2 = [for t in range(2,local.private_subnets_count*2+2,2): cidrsubnet(local.vpc_cidr, var.newbits_subnets, t+1)]
   private_subnet_roles = length(var.private_subnet_roles) != 0 ? flatten([for k,v in var.private_subnet_roles: [{role=v.role},{role=v.role}]]) : []
   private_subnets = concat(local.private_subnets_az1,local.private_subnets_az2)
-  database_subnets  = var.enable_db_subnets ? ([cidrsubnet(local.vpc_cidr, var.newbits_subnets, local.private_subnets_count+2), cidrsubnet(local.vpc_cidr, var.newbits_subnets, local.private_subnets_count+3)]) : []
+  database_subnets  = var.enable_db_subnets ? ([cidrsubnet(local.vpc_cidr, var.newbits_subnets, length(local.private_subnets)+2), cidrsubnet(local.vpc_cidr, var.newbits_subnets, length(local.private_subnets)+3)]) : []
   domain_name = data.aws_ssm_parameter.domain_name.value
   dns_servers = tolist(split(",", data.aws_ssm_parameter.dns_servers.value))
 }
